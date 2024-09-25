@@ -14,12 +14,14 @@
         {% endblock %}
     </head>
     <body>
+        {# Barre Navigation #}
         {% include "menu.html.twig" %}
         
         <div class="container" style="margin:auto">
             {% block body %}{% endblock %}
         </div>
 
+        {# Footer #}
         <footer class="py-5 bg-dark">
             {% include "footer.html.twig" %}
         </footer>
