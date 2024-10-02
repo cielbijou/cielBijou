@@ -29,7 +29,7 @@ class Produit
     private ?int $stockProd = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
-    private ?string $prixProd = null;
+    private ?float  $prixProd = null;
 
     /**
      * @var Collection<int, Commentaire>
@@ -106,12 +106,12 @@ class Produit
         return $this;
     }
 
-    public function getPrixProd(): ?string
+    public function getPrixProd(): ?float 
     {
         return $this->prixProd;
     }
 
-    public function setPrixProd(string $prixProd): static
+    public function setPrixProd(?float  $prixProd): static
     {
         $this->prixProd = $prixProd;
 

@@ -1,30 +1,34 @@
-<div class="d-flex align-items-center"><img class="pr-4" width="55" height="55" src="{{ asset('images/divers/Ciel.png')}}">
-<nav class="navbar navbar-expand-lg navbar-light flex-grow-1">
-    <div class="container px-3 px-lg-3">
-        <a class="navbar-brand" href="{{path('app_accueil')}}">Ciel Bijou</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{path('app_accueil')}}">Accueil</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Magasin</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Catalogue des Produits</a></li>
-                        <li><hr class="dropdown-divider"/></li>
-                        <li><a class="dropdown-item" href="#!">Produits en promotion</a></li>
-                        <li><hr class="dropdown-divider"/></li>
-                        <li><a class="dropdown-item" href="#!">Produits Ciel Bijou</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <form class="d-flex">
-                <button class="btn btn-outline-dark" type="submit">
-                    <i class="bi-cart-fill me-1"></i>
-                    Panier
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                </button>
-            </form>
+<div class="d-flex align-items-center">
+    <img class="pr-4" width="55" height="55" src="{{ asset('images/divers/Ciel.png') }}">
+    <nav class="navbar navbar-expand-lg navbar-light flex-grow-1">
+        <div class="container px-3 px-lg-3">
+            <a class="navbar-brand" href="{{ path('accueil') }}">Ciel Bijou</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ path('accueil') }}">Accueil</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Magasin
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ path('catalogue') }}">Tous les produits</a></li>
+                            <li><a class="dropdown-item" href="{{ path('catalogue_CielBijou') }}">Produits Ciel Bijou</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <button class="btn btn-outline-dark" type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Panier
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 </div>

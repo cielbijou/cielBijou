@@ -20,8 +20,8 @@ class Promotion
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateFinPromo = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 2)]
-    private ?string $remisePromo = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    private ?float  $remisePromo = null;
 
     #[ORM\ManyToOne(inversedBy: 'promotions')]
     #[ORM\JoinColumn(nullable: false)]
@@ -56,12 +56,12 @@ class Promotion
         return $this;
     }
 
-    public function getRemisePromo(): ?string
+    public function getRemisePromo(): ?float 
     {
         return $this->remisePromo;
     }
 
-    public function setRemisePromo(string $remisePromo): static
+    public function setRemisePromo(?float  $remisePromo): static
     {
         $this->remisePromo = $remisePromo;
 

@@ -19,18 +19,50 @@ class ProduitRepository extends ServiceEntityRepository
     //    /**
     //     * @return Produit[] Returns an array of Produit objects
     //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findByCategorie($value): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.uneCategorie = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.nomProd', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
+    public function findByCielBijou(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.imageProd LIKE :val')
+            ->setParameter('val', '%cb%')
+            ->orderBy('p.nomProd', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByCielBijouCollection1(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.imageProd LIKE :val')
+            ->setParameter('val', '%1cb%')
+            ->orderBy('p.nomProd', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
+    public function findByCielBijouCollection2(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.imageProd LIKE :val')
+            ->setParameter('val', '%2cb%')
+            ->orderBy('p.nomProd', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     //    public function findOneBySomeField($value): ?Produit
     //    {
     //        return $this->createQueryBuilder('p')

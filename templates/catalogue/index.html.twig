@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+{% block title %}Magasin{% endblock %}
+
+{% block body %}
+<div class="container-fluid pt-3 pb-3">
+    <div class="row">
+        <div class="col-md-2 filtre">
+            <!-- Partie de gauche Filtre -->
+            <h5>Filtre</h5>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mb-3">
+                        <p class="card-title m-1">Catégorie de bijoux</p>
+                        {% for laCategorie in categories %}
+                        <a href="{{ path('catalogue_cat',{'id' : laCategorie.id} )}}"><button type="button" class="btn btn-light card-button m-2">{{laCategorie.libelleCat}}</button></a> <!-- Ajout de mb-2 pour espacer verticalement -->                        
+                        {% endfor %}
+                    <a href="{{ path('catalogue')}}"><button type="button" class="btn btn-light card-button m-2">Toutes les catégories</button></a>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card mb-3">
+                        <p class="card-title m-1">Filtres spéciaux</p>
+                        <a href="{{path('catalogue_CielBijou')}}"><button type="button" class="btn btn-light card-button m-2">Collection originale Ciel Bijou</button></a>
+                        <a href="{{path('catalogue_Collection1')}}"><button type="button" class="btn btn-light card-button m-2">Première collection Ciel Bijou</button></a>
+                        <a href="{{path('catalogue_Collection2')}}"><button type="button" class="btn btn-light card-button m-2">Deuxième collection Ciel Bijou</button></a>
+                    </div>
+                </div>
+                <!-- Ajoutez d'autres cartes ou sections ici si besoin -->
+            </div>
+        </div>
+        <div class="col-md-10">
+            <!-- Reste de la page -->
+            <h5>Nos Produits</h5>
+            <div class="container mt-3">
+                <div class="row">
+                {% for produit in produits %}
+                    <div class="col-md-6 mb-4">
+                        <div class="d-flex">
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px; width: 150px; flex-shrink: 0;">
+                                <img src="{{asset('images/produit/'~produit.imageProd)}}" class="img-fluid" alt="Photo article">
+                            </div>
+                            <div class="col-md-6 ms-3"> <!-- Added margin-start for spacing -->
+                                <h5>{{produit.nomProd}}</h5>
+                                <p>{{produit.description}}</p>
+                                <p>Prix : {{produit.prixProd}} €</p>
+                                <a href="#" style="color: black;">Voir les commentaires</a>
+                                <div class="mt-3">Note :<div class="rating-static" data-rating="4.2">
+                                                            <span class="star">&#9733;</span>
+                                                            <span class="star">&#9733;</span>
+                                                            <span class="star">&#9733;</span>
+                                                            <span class="star">&#9733;</span>
+                                                            <span class="star">&#9734;</span></div></div>
+                                <a href="#" class="btn btn-primary mt-2">Ajouter au panier</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
