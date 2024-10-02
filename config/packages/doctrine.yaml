@@ -4,8 +4,8 @@ doctrine:
         driver: pdo_sqlsrv
         host: 192.168.151.10\SQLEXPRESS
         dbname: cielbijou
-        user: usercielbijou
-        password: P@ssw0rd
+        user: userappli
+        password: w9dtR-Faku
         charset: utf8bm4
         options:
            Encrypt: 'false'
