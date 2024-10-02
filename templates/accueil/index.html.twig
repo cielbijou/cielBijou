@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<div class="row">
+<img class="rounded" src="{{asset('images/divers/newCollection.jpg')}}" height="150">
+    <div class="col-4">
+        <div id="demo" align="left" class="carousel slide my-4" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img width="400" class="rounded" heigth="400" src="{{ asset('images/produit/Ocb2.jpg')}}" class="d-block img-fluid">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5 style='color:black;'></h5>
+                        <p style='color:white;'>Libelle image</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Colonne du texte à droite -->
+    <div class="col-8 d-flex pt-4">
+        <div>
+            <p style="font-size: 24px;">• Découvrez la nouvelle Collection Ciel Bijou</p>
+            <ul style="font-size: 18px; list-style-type: disc; padding-left: 20px;">
+                <li class="mt-2">Bague</li>
+                <li class="mt-2">Collier</li>
+                <li class="mt-2">Boucle d'oreille</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
