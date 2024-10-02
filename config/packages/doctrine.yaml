@@ -5,7 +5,7 @@ doctrine:
         host: localhost\SQLEXPRESS
         dbname: cielbijou
         user: userappli
-        password: w9dtR-Faku
+        password: symfony2025
         charset: utf8bm4
 
         # IMPORTANT: You MUST configure your server version,
