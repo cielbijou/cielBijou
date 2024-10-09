@@ -23,6 +23,10 @@ class Promotion
     #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 2)]
     private ?string $remisePromo = null;
 
+    #[ORM\ManyToOne(inversedBy: 'promotions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categorie $uneCategorie = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class Promotion
     public function setRemisePromo(string $remisePromo): static
     {
         $this->remisePromo = $remisePromo;
+
+        return $this;
+    }
+
+    public function getUneCategorie(): ?Categorie
+    {
+        return $this->uneCategorie;
+    }
+
+    public function setUneCategorie(?Categorie $uneCategorie): static
+    {
+        $this->uneCategorie = $uneCategorie;
 
         return $this;
     }
