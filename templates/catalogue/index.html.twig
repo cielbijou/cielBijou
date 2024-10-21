@@ -2,59 +2,120 @@
 {% block title %}Magasin{% endblock %}
 
 {% block body %}
+{% for message in app.flashes('panier') %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+<strong>{{message}}</strong>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
 <div class="container-fluid pt-3 pb-3">
     <div class="row">
-        <div class="col-md-2 filtre">
-            <!-- Partie de gauche Filtre -->
-            <h5>Filtre</h5>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card mb-3">
-                        <p class="card-title m-1">Catégorie de bijoux</p>
-                        {% for laCategorie in categories %}
-                        <a href="{{ path('catalogue_cat',{'id' : laCategorie.id} )}}"><button type="button" class="btn btn-light card-button m-2">{{laCategorie.libelleCat}}</button></a> <!-- Ajout de mb-2 pour espacer verticalement -->                        
-                        {% endfor %}
-                    <a href="{{ path('catalogue')}}"><button type="button" class="btn btn-light card-button m-2">Toutes les catégories</button></a>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="card mb-3">
-                        <p class="card-title m-1">Filtres spéciaux</p>
-                        <a href="{{path('catalogue_CielBijou')}}"><button type="button" class="btn btn-light card-button m-2">Collection originale Ciel Bijou</button></a>
-                        <a href="{{path('catalogue_Collection1')}}"><button type="button" class="btn btn-light card-button m-2">Première collection Ciel Bijou</button></a>
-                        <a href="{{path('catalogue_Collection2')}}"><button type="button" class="btn btn-light card-button m-2">Deuxième collection Ciel Bijou</button></a>
-                    </div>
-                </div>
-                <!-- Ajoutez d'autres cartes ou sections ici si besoin -->
-            </div>
+<!-- Partie de gauche Filtre avec position sticky -->
+<div class="col-md-2 filtre position-sticky" style="top: 20px;">
+<h5>Filtre</h5>
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-3">
+            <p class="card-title m-1">Catégorie de bijoux</p>
+            {% for laCategorie in categories %}
+            <a href="{{ path('catalogue_cat',{'id' : laCategorie.id} )}}">
+                <button type="button" class="btn btn-light card-button m-2">{{laCategorie.libelleCat}}</button>
+            </a>                       
+            {% endfor %}
+            <a href="{{ path('catalogue')}}">
+                <button type="button" class="btn btn-light card-button m-2">Toutes les catégories</button>
+            </a>
         </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card mb-3">
+            <p class="card-title m-1">Filtres Ciel Bijou</p>
+            <a href="{{path('catalogue_CielBijou')}}">
+                <button type="button" class="btn btn-light card-button m-2">Collection originale Ciel Bijou</button>
+            </a>
+            <a href="{{path('catalogue_Collection1')}}">
+                <button type="button" class="btn btn-light card-button m-2">Première collection Ciel Bijou</button>
+            </a>
+            <a href="{{path('catalogue_Collection2')}}">
+                <button type="button" class="btn btn-light card-button m-2">Deuxième collection Ciel Bijou</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card mb-3">
+            <p class="card-title m-1">Filtres de prix</p>
+            <a href="{{path('catalogue_croissant')}}">
+                <button type="button" class="btn btn-light card-button m-2">Prix croissant</button>
+            </a>
+            <a href="{{path('catalogue_decroissant')}}">
+                <button type="button" class="btn btn-light card-button m-2">Prix décroissant</button>
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+
+        <!-- Partie droite avec les produits -->
         <div class="col-md-10">
-            <!-- Reste de la page -->
             <h5>Nos Produits</h5>
             <div class="container mt-3">
                 <div class="row">
-                {% for produit in produits %}
-                    <div class="col-md-6 mb-4">
-                        <div class="d-flex">
-                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px; width: 150px; flex-shrink: 0;">
-                                <img src="{{asset('images/produit/'~produit.imageProd)}}" class="img-fluid" alt="Photo article">
-                            </div>
-                            <div class="col-md-6 ms-3"> <!-- Added margin-start for spacing -->
-                                <h5>{{produit.nomProd}}</h5>
-                                <p>{{produit.description}}</p>
-                                <p>Prix : {{produit.prixProd}} €</p>
-                                <a href="#" style="color: black;">Voir les commentaires</a>
-                                <div class="mt-3">Note :<div class="rating-static" data-rating="4.2">
-                                                            <span class="star">&#9733;</span>
-                                                            <span class="star">&#9733;</span>
-                                                            <span class="star">&#9733;</span>
-                                                            <span class="star">&#9733;</span>
-                                                            <span class="star">&#9734;</span></div></div>
-                                <a href="#" class="btn btn-primary mt-2">Ajouter au panier</a>
+                    {% for produit in produits %}
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex">
+                                <!-- Image du produit -->
+                                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px; width: 150px; flex-shrink: 0;">
+                                    <img src="{{asset('images/produit/'~produit.imageProd)}}" class="img-fluid" alt="Photo article">
+                                </div>
+                                
+                                <!-- Détails du produit -->
+                                <div class="col-md-6 ms-3"> <!-- Added margin-start for spacing -->
+                                    <h5>{{ produit.nomProd }}</h5>
+                                    <p>{{ produit.description }}</p>
+                                    <p>Prix : {{ produit.prixProd }} €</p>
+                                    <a href="#" style="color: black;">Voir les commentaires</a>
+
+                                    <!-- Note du produit -->
+                                    <div class="mt-3">Note :
+                                        {% set note_produit = 10 %} {# Par défaut, aucune note, on affiche 10 #}
+                                        
+                                        {# Chercher la note correspondante au produit #}
+                                        {% for note in notes %}
+                                            {% if note.produitId == produit.id %}
+                                                {% set note_produit = note.note %}
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {# Afficher les étoiles selon la note #}
+                                        <div class="rating-static" data-rating="{{ note_produit }}">
+                                            {% if note_produit == 0 %}
+                                                <span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                            {% elseif note_produit == 1 %}
+                                                <span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                            {% elseif note_produit == 2 %}
+                                                <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                            {% elseif note_produit == 3 %}
+                                                <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                            {% elseif note_produit == 4 %}
+                                                <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span>
+                                            {% elseif note_produit == 5 %}
+                                                <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+                                            {% elseif note_produit == 10 %}
+                                                <div class="small">Aucune note pour ce produit</div>
+                                            {% else %}
+                                                <div class="small">Erreur dans le chargement de la note</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <!-- Bouton ajouter au panier -->
+                                    <a href="{{path('panier_add',{'id'  : produit.id})}}" class="btn btn-primary mt-2">Ajouter au panier</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
