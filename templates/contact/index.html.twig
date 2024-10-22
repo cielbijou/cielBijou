@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page d'avis{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Sélectionnez la commande sur laquelle vous souhaitez laisser un avis</h1>
+
+    <h2 class="mb-3">Liste des commandes passées</h2>
+    <div class="row">
+        {% for commande in commandes %}
+            <div class="col-12 col-md-6 mb-4">
+                <a href="{{ path('commande_detail', { 'id': commande.id }) }}" class="text-decoration-none">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Commande du {{ commande.date|date('d/m/Y') }}</h5>
+                            <p class="card-text">
+                                Produits commandés :
+                                {% for produit in commande.produits %}
+                                    <img src="{{ asset('images/produit/' ~ produit.imageProd) }}" alt="Produit" class="img-fluid" style="max-width: 50px;">
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+

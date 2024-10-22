@@ -12,7 +12,9 @@
 {% if items|length > 0 %}
 <div class="container mt-4">
     <div class="row">
+    {% set total=0 %}
         {% for Prod in items %}
+        {% set total = total + Prod.produit.prixProd * Prod.qte %}
         <div class="col-12 mb-3">
             <div class="d-flex justify-content-between align-items-center p-3">
                 <div class="d-flex align-items-center" style="width: 150px;">
@@ -26,7 +28,6 @@
                 <div class="d-flex align-items-center" style="width: 100px;">
                     <span><strong>{{Prod.produit.prixProd}}€</strong></span>
                 </div>
-
                 <div class="d-flex align-items-center">
                     <a href="{{ path('panier_moins',{'id'  : Prod.produit.id}) }}"><button class="btn btn-outline-secondary btn-sm">-</button></a>
                     <input type="text" class="form-control text-center mx-2" value="{{Prod.qte}}" style="width: 50px;">
@@ -42,24 +43,27 @@
         </div>
         <hr>
         {% endfor %}
+        <div class="col-12 mb-3">
+            <div class="d-flex justify-content-end mt-4">
+                <div>Prix total du panier : &nbsp </div>
+                <div>{{total}}€</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Bouton de validation -->
     <div class="d-flex justify-content-end mt-4">
-        <button class="btn btn-primary">Valider le panier</button>
+        <a href="{{path('panier_vider')}}"><button class="btn btn-danger">Vider le panier</button></a>
+        <a href="{{path('commande')}}"><button class="btn btn-primary">Valider le panier</button></a>
     </div>
 </div>
 {% else %}
 <div class="container d-flex flex-column align-items-center justify-content-center vh-100">
     <div class="text-center">
-        <!-- Icône de panier vide -->
         <i class="bi bi-cart-x" style="font-size: 80px; color: #adb5bd;"></i>
         
-        <!-- Message du panier vide -->
         <h1 class="mt-4">Votre panier est vide</h1>
         <p class="lead text-muted">Il semble que vous n'ayez pas encore ajouté d'articles à votre panier.</p>
         
-        <!-- Bouton pour rediriger vers le catalogue -->
         <a href="{{ path('catalogue') }}" class="btn btn-primary mt-4">
             <i class="bi bi-shop me-2"></i> Aller au catalogue
         </a>

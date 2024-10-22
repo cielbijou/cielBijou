@@ -16,20 +16,17 @@ class LigneCommandeRepository extends ServiceEntityRepository
         parent::__construct($registry, LigneCommande::class);
     }
 
-    //    /**
-    //     * @return LigneCommande[] Returns an array of LigneCommande objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('l.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       public function findId($commandeId): array
+       {
+           return $this->createQueryBuilder('l')
+               ->select('unProduitId')
+               ->andWhere('l.uneCommandeId = :val')
+               ->setParameter('val', $commandeId)
+               ->orderBy('unProduitId', 'ASC')
+               ->getQuery()
+               ->getResult()
+           ;
+       }
 
     //    public function findOneBySomeField($value): ?LigneCommande
     //    {

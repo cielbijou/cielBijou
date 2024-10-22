@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page d'avis{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Détails de la Commande n°{{ commande.id }}</h1>
+
+    <h2 class="mb-3">Articles achetés</h2>
+    <ul class="list-group mb-4">
+        {% for article in produit %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <img src="{{ asset('images/produit/' ~ article.imageProd) }}" alt="Produit" class="img-fluid" style="max-width: 100px;">
+                    <span>{{ article.nomProd }}</span>
+                    <span>{{ article.prixProd }} €</span>
+                    <form action="{{ path('noter_produit', { 'commandeId': commande.id }) }}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Ajouter une note au produit</label>
+                            <div class="rating">
+                                {% for i in 0..5 %}
+                                    <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}">
+                                    <label for="star{{ i }}" class="form-check-label">{{ i }} ⭐</label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#feedbackForm" aria-expanded="false" aria-controls="feedbackForm">
+        Laisser un avis
+    </button>
+
+    <div class="collapse mt-4" id="feedbackForm">
+        <div class="card card-body">
+            <h3>Laissez votre avis</h3>
+            <form action="{{ path('soumettre_avis', { 'commandeId': commande.id }) }}" method="POST">
+                <div class="mb-3">
+                    <label for="commentaire" class="form-label">Votre commentaire</label>
+                    <textarea class="form-control" id="commentaire" name="commentaire" rows="3" placeholder="Écrivez votre avis ici"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success">Envoyer l'avis</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
