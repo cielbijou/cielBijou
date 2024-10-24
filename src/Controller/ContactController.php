@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Commentaire;
 use App\Repository\CommandeRepository;
 use App\Repository\LigneCommandeRepository;
 use App\Repository\ProduitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -49,6 +51,26 @@ class ContactController extends AbstractController
             'produit' => $produit,
             'commande' => $commandeRepository->find($id),
         ]);
+    }
+
+    #[Route('/contact/detail/soumettre', name: 'soumettre_avis')]
+    public function soumettreAvis(Request $request, Security $security): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $produitId = $request->request->get('produitId');
+        $commentaire = $request->request->get('commentaire');
+        $rating = $request->request->get('rating');
+        if ($commentaire && $rating) {
+            $enregistrement = new Commentaire();
+            $enregistrement->setDateCommentaire(new \DateTime());
+            $enregistrement->setContenuCommentaire($commentaire);
+            $enregistrement->setNoteCommentaire($rating);
+            $enregistrement->setUnClient($security->getUser());
+            $enregistrement->setUnProduit($produitId);
+            $enregistrement->setStatusCommentaire('Non Traité');
+            $this->addFlash('success', 'Votre avis a bien été soumis !');
+        }
+        return $this->redirectToRoute('accueil');
     }
     
 }
