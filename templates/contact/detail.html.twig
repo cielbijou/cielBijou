@@ -5,31 +5,37 @@
 {% block body %}
 {% for message in app.flashes('panier') %}
 <div class="alert alert-success alert-dismissible fade show" role="alert">
-<strong>{{message}}</strong>
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <strong>{{message}}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endfor %}
-<class="container mt-5">
-    <h1 class="text-center mb-4">Détails de la Commande n°{{ commande.id }}</h1>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Détails de la Commande n°{{ commande }}</h1>
 
     <h2 class="mb-3">Articles achetés</h2>
     <ul class="list-group mb-4">
-    {% for article in produit %}
+    {% for article in prod %}
         <li class="list-group-item">
             <div class="d-flex justify-content-between">
-                <img src="{{ asset('images/produit/' ~ article.imageProd) }}" alt="Produit" class="img-fluid" style="max-width: 100px;">
-                <span>{{ article.nomProd }}</span>
-                <span>{{ article.prixProd }} €</span>
-                <form action="{{ path('soumettre_avis') }}" method="POST">  {#, { 'commandeId': commande.id } si on veux rajouter l'id de la commande et noter séparement les produits et la commande #}
+                <img src="{{ asset('images/produit/' ~ article.unProduit.imageProd) }}" alt="Produit" class="img-fluid" style="max-width: 100px;">
+                <span>{{ article.unProduit.nomProd }}</span>
+                <span>{{ article.unProduit.prixProd }} €</span>
+                
+                <form action="{{ path('soumettre_avis') }}" method="POST"> 
                     <div class="mb-3">
-                        <label for="commentaire_{{ article.idProd }}" class="form-label">Votre commentaire</label>
-                        <textarea class="form-control" id="commentaire_{{ article.idProd }}" name="commentaire" rows="3" placeholder="Écrivez votre avis ici"></textarea>
-                        <input type="hidden" name="produitId" value="{{ article.idProd }}">
+                        <label for="commentaire_{{ article.id }}" class="form-label">Votre commentaire</label>
+                        <textarea class="form-control" id="commentaire_{{ article.id }}" name="commentaire" rows="3" placeholder="Écrivez votre avis ici"></textarea>
+                        
+                        <input type="hidden" name="produitId" value="{{ article.unProduit.id }}">
+                        
                         <div class="rating">
-                            {% for i in 5..1 %}
-                                <input type="radio" id="star{{ i }}_{{ article.idProd }}" name="rating" value="{{ i }}">
-                                <label for="star{{ i }}_{{ article.idProd }}" class="form-check-label">{{ i }} ⭐</label>
-                            {% endfor %}
+                        {% for i in 5..1 %}
+                            <input type="radio" id="star{{ i }}_{{ article.id }}" name="rating" value="{{ i }}">
+                            <label for="star{{ i }}_{{ article.id }}" class="form-check-label">{{ i }} ⭐</label>
+                        {% endfor %}
+                
+                    
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success">Envoyer l'avis</button>
@@ -37,6 +43,7 @@
             </div>
         </li>
     {% endfor %}
-</ul>
+
+    </ul>
 </div>
 {% endblock %}

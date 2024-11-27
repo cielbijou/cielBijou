@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commentaires sur le produit{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+
+    <div class=" shadow-sm">
+        <div class="text-center">
+            <!-- Image centrée et en taille normale -->
+            <img src="{{ asset('images/produit/'~produit.imageProd) }}" class="img-fluid rounded mx-auto d-block" style="max-width: 100%; height: auto;" alt="Image du produit">
+        </div>
+        <div class="card-body text-center">
+            <h3 class="card-title">{{ produit.nomProd }}</h3>
+            <p class="card-text text-muted">{{ produit.description }}</p>
+        </div>
+    </div>
+
+    <h4>Commentaires</h4>
+    {% if commentaire|length > 0 %}
+        <ul class="list-group">
+        {% for comment in commentaire %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <!-- Affiche le nom du client -->
+                    <strong>{{ comment.unClient.nom }} {{ comment.unClient.prenom }}</strong>
+
+                    <div class="rating-static" data-rating="{{ comment.noteCommentaire }}">
+                        {% if comment.noteCommentaire == 0 %}
+                            <span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                        {% elseif comment.noteCommentaire == 1 %}
+                            <span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                        {% elseif comment.noteCommentaire == 2 %}
+                            <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                        {% elseif comment.noteCommentaire == 3 %}
+                            <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                        {% elseif comment.noteCommentaire == 4 %}
+                            <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span>
+                        {% elseif comment.noteCommentaire == 5 %}
+                            <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+                        {% else %}
+                            <div class="small">Erreur dans le chargement de la note</div>
+                        {% endif %}
+                    </div>
+                    <small class="text-muted">{{ comment.dateCommentaire|date('d/m/Y') }}</small>
+                </div>
+                <p class="mb-1">{{ comment.contenuCommentaire }}</p>
+            </li>
+        <p></p>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">Aucun commentaire pour ce produit pour le moment.</p>
+    {% endif %}
+<a href="{{ path('catalogue') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Retourner au catalogue</a>
+</div>
+{% endblock %}

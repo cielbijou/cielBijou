@@ -30,6 +30,20 @@ class CommentaireRepository extends ServiceEntityRepository
            ;
        }
 
+    public function findCommentaireProduit($id)
+        {
+            return $this->createQueryBuilder('c')
+                ->innerJoin('c.unClient', 'client')
+                ->where('c.unProduit = :val')  
+                ->setParameter('val', $id)
+                ->orderBy('c.dateCommentaire', 'DESC')
+                ->setMaxResults(20)
+                ->getQuery()
+                ->getResult();
+        }
+
+
+
     //    public function findOneBySomeField($value): ?Commentaire
     //    {
     //        return $this->createQueryBuilder('c')

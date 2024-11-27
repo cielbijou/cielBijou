@@ -28,7 +28,7 @@ class Produit
     #[ORM\Column]
     private ?int $stockProd = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    #[ORM\Column]
     private ?float  $prixProd = null;
 
     /**

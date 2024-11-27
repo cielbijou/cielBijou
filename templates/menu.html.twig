@@ -1,5 +1,5 @@
 <div class="d-flex align-items-center">
-    <img class="pr-4" width="55" height="55" src="{{ asset('images/divers/Ciel.png') }}">
+    <img class="pr-4" width="55" height="55" src="{{ asset('images/divers/Ciel.png') }}" alt="Logo Ciel Bijou">
     <nav class="navbar navbar-expand-lg navbar-light flex-grow-1">
         <div class="container px-3 px-lg-3">
             <a class="navbar-brand" href="{{ path('accueil') }}">Ciel Bijou</a>
@@ -20,15 +20,134 @@
                             <li><a class="dropdown-item" href="{{ path('catalogue_CielBijou') }}">Produits Ciel Bijou</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('contact')}}">
+                                Contact 
+                            </a>
+                        </li>
+                    {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_login') }}">
+                                Connexion 
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_register') }}">
+                                S'inscrire <i class="bi bi-person-plus"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('profil_index') }}">
+                                profil <i class="bi bi-person-circle"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_logout') }}">
+                                Déconnexion <i class="bi bi-box-arrow-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <a class="d-flex text-decoration-none" href="{{ path('panier') }}">
-                <button class="btn btn-outline-dark" type="submit">
-                    <i class="bi-cart-fill me-1"></i>
-                    Panier
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">{{ app.session.get('nbproduitpanier') }}</span>
-                </button>
-            </a>            
+                    <button class="btn btn-outline-dark d-flex align-items-center" type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Panier
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">{{ app.session.get('nbproduitpanier') }}</span>
+                    </button>
+                </a>
             </div>
         </div>
     </nav>
 </div>
+
+
+
+{% block stylesheets %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+
+/* Généralement, on veut un fond plus léger et plus moderne */
+.navbar {
+    background-color: #f8f9fa; /* Fond clair */
+    border-bottom: 2px solid #e0e0e0; /* Ligne de séparation fine */
+}
+
+/* Style du logo */
+.navbar-brand img {
+    border-radius: 50%; /* Pour un effet rond sur l'image */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Une petite ombre portée pour donner de la profondeur */
+}
+
+/* Style du bouton de menu pour mobile */
+.navbar-toggler {
+    border-color: #ddd; /* Couleur de bordure pour le toggler */
+}
+
+.navbar-toggler-icon {
+    background-color: #333; /* Changer la couleur du hamburger */
+}
+
+/* Liens du menu */
+.nav-item .nav-link {
+    color: #333 !important; /* Couleur du texte */
+    font-weight: 500;
+    transition: color 0.3s ease, background-color 0.3s ease; /* Transition pour les effets */
+}
+
+.nav-item .nav-link:hover, 
+.nav-item .nav-link:focus {
+    color: #fff !important; /* Changer la couleur du texte au survol */
+    background-color: #007bff; /* Couleur de fond bleue au survol */
+    border-radius: 5px; /* Coins arrondis sur le survol */
+}
+
+/* Style des liens de connexion et d'inscription */
+.navbar-nav .nav-item a.nav-link {
+    color: #007bff;
+}
+
+.navbar-nav .nav-item a.nav-link:hover {
+    background-color: #e3f2fd;
+}
+
+/* Dropdown */
+.dropdown-menu {
+    border-radius: 5px;
+}
+
+.dropdown-item {
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* Panier bouton */
+.btn-outline-dark {
+    border-radius: 30px; /* Arrondir les bords du bouton Panier */
+    transition: all 0.3s ease;
+}
+
+.btn-outline-dark:hover {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.btn-outline-dark i {
+    font-size: 18px;
+}
+
+/* Badge panier */
+.badge.bg-dark {
+    font-size: 14px;
+}
+
+</style>
+{% endblock %}

@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use Exception;
 use App\Entity\Produit;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Produit>
@@ -62,6 +63,28 @@ class ProduitRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function setStock(int $id, int $qte): void
+    {
+        // Récupération de la connexion à la base de données via Doctrine DBAL
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'UPDATE produit
+                SET stock_prod = stock_prod - :qte
+                WHERE id = :id;';
+
+        try {
+            // Préparation de la requête SQL
+            $stmt = $conn->prepare($sql);
+            // Exécution de la requête avec les paramètres
+            $stmt->execute([
+                'qte' => $qte,
+                'id'  => $id
+            ]);
+        } catch (Exception $e) {
+            // Gestion des erreurs, vous pouvez loguer l'erreur ou la relancer selon votre logique
+            throw new \RuntimeException("Erreur lors de la mise à jour du stock: " . $e->getMessage());
+        }
     }
     //    public function findOneBySomeField($value): ?Produit
     //    {

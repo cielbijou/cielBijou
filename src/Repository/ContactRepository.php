@@ -2,33 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Client;
-use App\Entity\Commande;
+use App\Entity\Contact;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Commande>
+ * @extends ServiceEntityRepository<Contact>
  */
-class CommandeRepository extends ServiceEntityRepository
+class ContactRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Commande::class);
-    }
-
-    public function findByUser(Client $client): array
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.unClient = :val')
-            ->setParameter('val', $client)
-            ->orderBy('c.id', 'ASC')
-            ->getQuery()
-            ->getResult();
+        parent::__construct($registry, Contact::class);
     }
 
     //    /**
-    //     * @return Commande[] Returns an array of Commande objects
+    //     * @return Contact[] Returns an array of Contact objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -42,7 +31,7 @@ class CommandeRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Commande
+    //    public function findOneBySomeField($value): ?Contact
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')
@@ -51,5 +40,4 @@ class CommandeRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-    
 }

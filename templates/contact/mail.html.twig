@@ -1,0 +1,14 @@
+Bonjour {{ unContact.nom ~ unContact.prenom}},
+<br>
+Votre message a bien été transmis à la société Ciel Bijou.
+<br>
+Nous vous répondrons le plus rapidement possible.
+<br>
+Cordialement
+<br>
+<hr>
+Email : {{ unContact.email}}<br>
+Date : {{ unContact.date |date('d-m-Y')}}<br>
+Objet : {{ unContact.objet }}<br>
+Profession : {{ unContact.profession}}<br>
+Message : {{ unContact.message}}<br> 

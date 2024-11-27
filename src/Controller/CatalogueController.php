@@ -25,25 +25,22 @@ class CatalogueController extends AbstractController
     function Notation() {
         $notes = $this->commentaireRepository->findAll();
         $produits = $this->produitRepository->findAll(); 
-    
         $result = [];
-    
         foreach ($produits as $produit) {
             $compteur = 0;
             $moyenne = 0;
-    
             foreach ($notes as $note) {
                 if ($note->getUnProduit()->getId() == $produit->getId()) {
                     $compteur++;
                     $moyenne += $note->getNoteCommentaire();
                 }
             }
-    
             if ($compteur > 1) {
                 $moyenne /= $compteur; 
             } elseif ($compteur == 0) {
                 $moyenne = 10; 
             } 
+            $moyenne = ceil($moyenne); 
             $result[] = [
                 'produitId' => $produit->getId(),
                 'note' => $moyenne,
@@ -120,6 +117,15 @@ class CatalogueController extends AbstractController
             'produits' => $produitRepository->findByCategorie($id),
             'categories' => $categorieRepository->findAll(),
             'notes' => $this->Notation(),
+        ]);
+    }
+
+    #[Route('/catalogue/commentaire/{id}', name: 'catalogue_com')]
+    public function indexCom($id,ProduitRepository $produitRepository, CommentaireRepository $commentaireRepository): Response
+    {       
+        return $this->render('catalogue/commentaire.html.twig', [
+            'produit' => $produitRepository->find($id),
+            'commentaire'=>$commentaireRepository->findCommentaireProduit($id),
         ]);
     }
 

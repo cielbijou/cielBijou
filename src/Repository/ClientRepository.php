@@ -57,4 +57,12 @@ class ClientRepository extends ServiceEntityRepository implements PasswordUpgrad
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findById(int $id): ?Client
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

@@ -18,6 +18,7 @@ class CommandeController extends AbstractController
     #[Route('/commande', name: 'commande')]
     public function index(SessionInterface $session, ProduitRepository $prodRepo, ClientRepository $client, Security $security): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $panier = $session->get('panier', []);
         if(count($panier)==0){
             $this->addFlash('panier', 'Le panier est vide');
@@ -28,11 +29,10 @@ class CommandeController extends AbstractController
         foreach($panier as $id => $quantite){
             $panierAvecDonnee[] = ['produit'=>$prodRepo->find($id), 'qte'=>$quantite];
         }
-        // $user = $security->getUser();
 
         return $this->render('commande/index.html.twig', [
             'items' => $panierAvecDonnee,
-            // 'donneCli' => $client->find($user),
+            'user' => $this->getUser(),
         ]);
     }
 
@@ -51,6 +51,7 @@ class CommandeController extends AbstractController
             $cdeLC = new LigneCommande();
             $cdeLC->setQuantite($quantite);
             $cdeLC->setUneCommande($cde);
+            $ProdRepo->setStock($id, $quantite);
             $cdeLC->setUnProduit($ProdRepo->find($id));
             $entityManager->persist($cdeLC);
         }

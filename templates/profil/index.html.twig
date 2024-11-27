@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil Utilisateur{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white text-center">
+                <h2>Profil Utilisateur</h2>
+            </div>
+            <div class="card-body">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-3 text-center">
+                        {% if profil.Photo is not null %}
+                            <img src="{{ profil.displayPhoto }}" class="rounded-circle shadow-sm" height="150" alt="Photo de profil">
+                        {% else %}
+                            <img src="{{ asset('images/divers/identite.jpg') }}" class="rounded-circle shadow-sm" height="150" alt="Photo par défaut">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-9">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Nom</strong></td>
+                                    <td>{{ profil.nom }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Prénom</strong></td>
+                                    <td>{{ profil.prenom }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rôle</strong></td>
+                                    <td>
+                                        {% for role in profil.roles %}
+                                            {% if role == 'ROLE_USER' %}
+                                                Utilisateur
+                                            {% elseif role == 'ROLE_EDITOR' %}
+                                                Éditeur
+                                            {% else %}
+                                                Administrateur
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Login (mail)</strong></td>
+                                    <td>{{ profil.email }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col text-center">
+                        <a href="{{ path('profil_editinfo') }}" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-edit"></i> Modifier mes informations
+                        </a>
+                        <a href="{{ path('contact_index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-box"></i> Consulter mes commandes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

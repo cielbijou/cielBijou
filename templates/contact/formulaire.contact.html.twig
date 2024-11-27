@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="mb-4">Contactez-nous</h1>
+
+    {% for message in app.flashes('contact') %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            {{ form_start(formContact, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+            <div class="form-group mb-3">
+                {{ form_label(formContact.nom, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(formContact.nom, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(formContact.nom) }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form_label(formContact.prenom, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(formContact.prenom, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(formContact.prenom) }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form_label(formContact.profession, 'Profession', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(formContact.profession, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(formContact.profession) }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form_label(formContact.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(formContact.email, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(formContact.email) }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form_label(formContact.objet, 'Objet', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(formContact.objet, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(formContact.objet) }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form_label(formContact.message, 'Message', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(formContact.message, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+                {{ form_errors(formContact.message) }}
+            </div>
+            <button class="btn btn-success">{{ button_label|default('Envoyer le message') }}</button>
+            {{ form_end(formContact) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

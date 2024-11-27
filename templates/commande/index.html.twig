@@ -27,13 +27,13 @@
                     
                     <form>
                         <div class="mb-3">
-                            <label for="nomPrenom" value="Bdd prenom + nom" class="form-label">Nom et Prénom</label>
-                            <input type="text" class="form-control" id="nomPrenom" placeholder="Nom et Prénom" disabled>
+                            <label for="nomPrenom" value="{{user.nom}}{{user.prenom}}" class="form-label">Nom et Prénom</label>
+                            <input type="text" class="form-control" id="nomPrenom" placeholder="{{user.nom ~ ' ' ~ user.prenom }}" disabled>
                         </div>
                         
                         <div class="mb-3">
-                            <label for="email" value="BDD email" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="email" placeholder="Email" disabled>
+                            <label for="email" value="{{user.email}}" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="email" placeholder="{{user.email}}" disabled>
                         </div>
                     </form>
                 </div>

@@ -28,6 +28,17 @@ class LigneCommandeRepository extends ServiceEntityRepository
            ;
        }
 
+       
+       public function findProduitCommande($commande): array
+       {
+           return $this->createQueryBuilder('l') 
+               ->where('l.uneCommande = :val') 
+               ->setParameter('val', $commande)
+               ->orderBy('l.uneCommande', 'ASC')
+               ->getQuery()
+               ->getResult();
+       }
+       
     //    public function findOneBySomeField($value): ?LigneCommande
     //    {
     //        return $this->createQueryBuilder('l')

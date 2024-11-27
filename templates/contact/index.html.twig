@@ -4,21 +4,25 @@
 
 {% block body %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Sélectionnez la commande sur laquelle vous souhaitez laisser un avis</h1>
+    <h1 class="text-center mb-4">Sélectionnez la commande sur laquelle vous souhaitez laisser un avis sur un produit</h1>
 
-    <h2 class="mb-3">Liste des commandes passées</h2>
+    <h4 class="mb-3">Liste des commandes passées</h4>
     <div class="row">
         {% for commande in commandes %}
             <div class="col-12 col-md-6 mb-4">
-                <a href="{{ path('commande_detail', { 'id': commande.id }) }}" class="text-decoration-none">
+                <a href="{{ path('contact_detail',{'id'  : commande.id})}}" class="text-decoration-none">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h5 class="card-title">Commande du {{ commande.date|date('d/m/Y') }}</h5>
-                            <p class="card-text">
+                            <h5 class="card-title text-dark">Commande du {{ commande.dateCommande|date('d/m/Y') }}</h5>
+                            <p class="card-text text-dark">
                                 Produits commandés :
-                                {% for produit in commande.produits %}
-                                    <img src="{{ asset('images/produit/' ~ produit.imageProd) }}" alt="Produit" class="img-fluid" style="max-width: 50px;">
-                                {% endfor %}
+                                {% if prod[loop.index0] is defined %}
+                                    {% for produit in prod[loop.index0] %}
+                                        <img src="{{ asset('images/produit/' ~ produit.imageProd) }}" alt="Produit" class="img-fluid" style="max-width: 50px;">
+                                    {% endfor %}
+                                {% else %}
+                                    <span>Aucun produit pour cette commande.</span>
+                                {% endif %}
                             </p>
                         </div>
                     </div>

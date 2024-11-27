@@ -1,0 +1,31 @@
+{{ form_start(form, { 'attr': { 'class': 'form-group' } }) }}
+    <div class="mb-3 row align-items-center">
+        <label for="{{ form.email.vars.id }}" class="col-sm-3 col-form-label"><strong>Email</strong></label>
+        <div class="col-sm-9">
+            {{ form_widget(form.email, { 'attr': { 'class': 'form-control', 'readonly': true } }) }}
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        <label for="{{ form.nom.vars.id }}" class="col-sm-3 col-form-label"><strong>Nom</strong></label>
+        <div class="col-sm-9">
+            {{ form_widget(form.nom, { 'attr': { 'class': 'form-control' } }) }}
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        <label for="{{ form.prenom.vars.id }}" class="col-sm-3 col-form-label"><strong>Prénom</strong></label>
+        <div class="col-sm-9">
+            {{ form_widget(form.prenom, { 'attr': { 'class': 'form-control' } }) }}
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> {{ button_label|default('Enregistrer') }}
+        </button>
+        <a href="{{ path('profil_index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retourner à la liste
+        </a>
+    </div>
+{{ form_end(form) }}
