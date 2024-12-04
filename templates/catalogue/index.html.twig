@@ -45,21 +45,29 @@
     <div class="col-12">
     <div class="card mb-3">
     <p class="card-title m-1">Filtres de prix</p>
-    <form method="POST" action="{{ path(app.request.attributes.get('_route'), { 'id': app.request.attributes.get('id') }) }}">
+    <form method="POST" action="{{ path(app.request.attributes.get('_route'), { 'id': app.request.attributes.get('id') }) }}" class="bg-light p-3 rounded shadow-sm mb-4">
         <input type="hidden" name="categorie" value="{{ app.request.query.get('categorie') }}">
 
-        <div class="pl-5">
-            <label for="ordre">Trier par prix :</label>
-            <br>
-            <input type="radio" name="ordre" value="ASC" >
-                Croissant
-            <br>
-            <input type="radio" name="ordre" value="DESC" >
-                Décroissant
+        <div class="form-group">
+            <label for="ordre" class="font-weight-bold mb-2">Trier par prix :</label>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="prixCroissant" name="ordre" value="ASC" class="custom-control-input">
+                <label class="custom-control-label" for="prixCroissant">
+                    <i class="fas fa-sort-amount-up-alt mr-1"></i> Prix croissant
+                </label>
+            </div>
+            <div class="custom-control custom-radio mt-2">
+                <input type="radio" id="prixDecroissant" name="ordre" value="DESC" class="custom-control-input">
+                <label class="custom-control-label" for="prixDecroissant">
+                    <i class="fas fa-sort-amount-down mr-1"></i> Prix décroissant
+                </label>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-sm mt-2">Appliquer</button>
-    </form>
+        <button type="submit" class="btn btn-primary mt-3">
+            <i class="fas fa-filter mr-1"></i> Appliquer le tri
+        </button>
+</form>
 
 
 
