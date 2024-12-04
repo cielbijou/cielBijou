@@ -43,15 +43,28 @@
     </div>
 
     <div class="col-12">
-        <div class="card mb-3">
-            <p class="card-title m-1">Filtres de prix</p>
-            <a href="{{path('catalogue_croissant')}}">
-                <button type="button" class="btn btn-light card-button m-2">Prix croissant</button>
-            </a>
-            <a href="{{path('catalogue_decroissant')}}">
-                <button type="button" class="btn btn-light card-button m-2">Prix décroissant</button>
-            </a>
+    <div class="card mb-3">
+    <p class="card-title m-1">Filtres de prix</p>
+    <form method="POST" action="{{ path(app.request.attributes.get('_route'), { 'id': app.request.attributes.get('id') }) }}">
+        <input type="hidden" name="categorie" value="{{ app.request.query.get('categorie') }}">
+
+        <div class="pl-5">
+            <label for="ordre">Trier par prix :</label>
+            <br>
+            <input type="radio" name="ordre" value="ASC" >
+                Croissant
+            <br>
+            <input type="radio" name="ordre" value="DESC" >
+                Décroissant
         </div>
+
+        <button type="submit" class="btn btn-primary btn-sm mt-2">Appliquer</button>
+    </form>
+
+
+
+    </div>
+
     </div>
 </div>
 </div>

@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\Mapping\Id;
+use App\Repository\ProduitRepository;
 use App\Repository\CategorieRepository;
 use App\Repository\CommentaireRepository;
-use App\Repository\ProduitRepository;
-use Doctrine\ORM\Mapping\Id;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CatalogueController extends AbstractController
 {
@@ -49,72 +50,82 @@ class CatalogueController extends AbstractController
     
         return $result;
     }
+
+    private function getSortOrder(string $ordre): string
+    {
+        return match ($ordre) {
+            'croissant' => 'ASC',  
+            'ASC' => 'ASC', 
+            'DESC' => 'DESC', 
+            'decroissant' => 'DESC',
+            default => 'ASC', 
+        };
+    }
     
     #[Route('/catalogue', name: 'catalogue')]
-    public function index(ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function index(Request $request, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {
+        $order = $request->request->get('ordre', 'croissant');
+        $sortOrder = $this->getSortOrder($order);
+        $prod = $produitRepository->findByPrix($sortOrder);
+    
         return $this->render('catalogue/index.html.twig', [
-            'produits' => $produitRepository->findAll(),
+            'produits' => $prod,
             'categories' => $categorieRepository->findAll(),
             'notes' => $this->Notation(),
         ]);
     }
 
     #[Route('/catalogue/CielBijou', name: 'catalogue_CielBijou')]
-    public function indexCielBijou(ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function indexCielBijou(Request $request, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {   
+        
+        $order = $request->request->get('ordre', 'croissant');
+        $sortOrder = $this->getSortOrder($order);
+        $produits = $produitRepository->findByCielBijou($sortOrder);
+
         return $this->render('catalogue/index.html.twig', [
-            'produits' => $produitRepository->findByCielBijou(),
+            'produits' => $produits,
             'categories' => $categorieRepository->findAll(),
             'notes' => $this->Notation(),
         ]);
     }
 
     #[Route('/catalogue/CielBijou/Collection1', name: 'catalogue_Collection1')]
-    public function indexCollection1(ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function indexCollection1(Request $request,ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {   
+        $order = $request->request->get('ordre', 'croissant');
+        $sortOrder = $this->getSortOrder($order);
+        $prod = $produitRepository->findByCielBijouCollection1($sortOrder);
         return $this->render('catalogue/index.html.twig', [
-            'produits' => $produitRepository->findByCielBijouCollection1(),
+            'produits' => $prod,
             'categories' => $categorieRepository->findAll(),
             'notes' => $this->Notation(),
         ]);
     }
 
     #[Route('/catalogue/CielBijou/Collection2', name: 'catalogue_Collection2')]
-    public function indexCollection2(ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
-    {   
-        return $this->render('catalogue/index.html.twig', [
-            'produits' => $produitRepository->findByCielBijouCollection2(),
-            'categories' => $categorieRepository->findAll(),
-            'notes' => $this->Notation(),
-        ]);
-    }
+    public function indexCollection2(Request $request, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    {
+        $order = $request->request->get('ordre', 'croissant');
+        $sortOrder = $this->getSortOrder($order); // 'ASC' ou 'DESC'
+        $prod = $produitRepository->findByCielBijouCollection2($sortOrder);
 
-    #[Route('/catalogue/CielBijou/prixCroissant', name: 'catalogue_croissant')]
-    public function indexCroissant(ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
-    {   
         return $this->render('catalogue/index.html.twig', [
-            'produits' => $produitRepository->findBy([], ['prixProd' => 'ASC']),
-            'categories' => $categorieRepository->findAll(),
-            'notes' => $this->Notation(),
-        ]);
-    }
-
-    #[Route('/catalogue/CielBijou/prixDecroissant', name: 'catalogue_decroissant')]
-    public function indexDecroissant(ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
-    {   
-        return $this->render('catalogue/index.html.twig', [
-            'produits' => $produitRepository->findBy([], ['prixProd' => 'DESC']),
+            'produits' => $prod,
             'categories' => $categorieRepository->findAll(),
             'notes' => $this->Notation(),
         ]);
     }
 
     #[Route('/catalogue/{id}', name: 'catalogue_cat')]
-    public function indexCat($id,ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function indexCat($id,Request $request,ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {   
+        $order = $request->request->get('ordre', 'croissant');
+        $sortOrder = $this->getSortOrder($order);
+        $prod = $produitRepository->findByCategorie($id, $sortOrder);
         return $this->render('catalogue/index.html.twig', [
-            'produits' => $produitRepository->findByCategorie($id),
+            'produits' => $prod,
             'categories' => $categorieRepository->findAll(),
             'notes' => $this->Notation(),
         ]);

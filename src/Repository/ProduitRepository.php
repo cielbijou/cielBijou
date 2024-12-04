@@ -17,49 +17,60 @@ class ProduitRepository extends ServiceEntityRepository
         parent::__construct($registry, Produit::class);
     }
 
+    public function findByPrix($ordre): array
+    {
+    // Vérifie si l'ordre est valide, sinon utilise 'ASC' par défaut
+    $ordre = ($ordre === 'DESC') ? 'DESC' : 'ASC';
+
+    return $this->createQueryBuilder('p')
+        ->orderBy('p.prixProd', $ordre) // Utilise directement 'ASC' ou 'DESC' dans orderBy
+        ->getQuery()
+        ->getResult();
+    }
+
     //    /**
     //     * @return Produit[] Returns an array of Produit objects
     //     */
-    public function findByCategorie($value): array
+    public function findByCategorie($value, $ordre): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.uneCategorie = :val')
+            ->OrderBy('p.prixProd', $ordre)
             ->setParameter('val', $value)
-            ->orderBy('p.nomProd', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
+    
 
-    public function findByCielBijou(): array
+    public function findByCielBijou($ordre): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.imageProd LIKE :val')
+            ->OrderBy('p.prixProd', $ordre)
             ->setParameter('val', '%cb%')
-            ->orderBy('p.nomProd', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
 
-    public function findByCielBijouCollection1(): array
+    public function findByCielBijouCollection1($ordre): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.imageProd LIKE :val')
+            ->OrderBy('p.prixProd', $ordre)
             ->setParameter('val', '%1cb%')
-            ->orderBy('p.nomProd', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
 
 
-    public function findByCielBijouCollection2(): array
+    public function findByCielBijouCollection2($ordre): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.imageProd LIKE :val')
+            ->OrderBy('p.prixProd', $ordre)
             ->setParameter('val', '%2cb%')
-            ->orderBy('p.nomProd', 'ASC')
             ->getQuery()
             ->getResult()
         ;
