@@ -16,20 +16,22 @@ class PromotionRepository extends ServiceEntityRepository
         parent::__construct($registry, Promotion::class);
     }
 
-    //    /**
-    //     * @return Promotion[] Returns an array of Promotion objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       /**
+        * @return Promotion[] Returns an array of Promotion objects
+        */
+       public function findPromo(): array
+       {
+            $currentDate = new \DateTime();
+
+           return $this->createQueryBuilder('p')
+                ->andWhere('p.dateDebutPromo <= :currentDate')
+                ->andWhere('p.dateFinPromo >= :currentDate')
+                ->setParameter('currentDate', $currentDate)
+               ->orderBy('p.id', 'ASC')
+               ->getQuery()
+               ->getResult()
+           ;
+       }
 
     //    public function findOneBySomeField($value): ?Promotion
     //    {

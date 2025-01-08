@@ -97,13 +97,26 @@ class ProduitRepository extends ServiceEntityRepository
             throw new \RuntimeException("Erreur lors de la mise à jour du stock: " . $e->getMessage());
         }
     }
-    //    public function findOneBySomeField($value): ?Produit
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+
+    public function getPromotion($ordre){
+        $qb = $this->createQueryBuilder('p')
+        ->select('p.id, p.nomProd, p.description, p.imageProd, p.stockProd, p.prixProd, c.libelleCat, pr.remisePromo')
+        ->innerJoin(
+            'App\Entity\Categorie', // L'entité ou table pour la catégorie
+            'c',                   // Alias
+            'WITH',                // Clause personnalisée
+            'p.uneCategorie = c.id' // Condition personnalisée de la jointure
+        )
+        ->innerJoin('App\Entity\Promotion','pr','WITH','p.uneCategorie = pr.uneCategorie')
+        ->where('pr.dateDebutPromo < :now')
+        ->andWhere('pr.dateFinPromo > :now')
+        ->orderBy('c.libelleCat', 'ASC') 
+        ->addOrderBy('p.prixProd', $ordre)
+        ->setParameter('now', new \DateTime()) 
+        ->getQuery();
+    
+        return $qb->getResult();
+
+        }
+
 }

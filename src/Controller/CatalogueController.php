@@ -2,14 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Promotion;
 use Doctrine\ORM\Mapping\Id;
 use App\Repository\ProduitRepository;
 use App\Repository\CategorieRepository;
 use App\Repository\CommentaireRepository;
+use App\Repository\PromotionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Constraints\Length;
 
 class CatalogueController extends AbstractController
 {
@@ -113,6 +116,20 @@ class CatalogueController extends AbstractController
 
         return $this->render('catalogue/index.html.twig', [
             'produits' => $prod,
+            'categories' => $categorieRepository->findAll(),
+            'notes' => $this->Notation(),
+        ]);
+    }
+
+    
+    #[Route('/catalogue/CielBijou/Promotion', name: 'catalogue_Promotion')]
+    public function indexPromotion(Request $request,ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    {
+        $order = $request->request->get('ordre', 'croissant');
+        $sortOrder = $this->getSortOrder($order); 
+        $produits =  $produitRepository->getPromotion($sortOrder);
+        return $this->render('catalogue/promo.html.twig', [
+            'produits' => $produits,
             'categories' => $categorieRepository->findAll(),
             'notes' => $this->Notation(),
         ]);
