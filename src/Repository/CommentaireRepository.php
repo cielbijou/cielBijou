@@ -30,7 +30,7 @@ class CommentaireRepository extends ServiceEntityRepository
            ;
        }
 
-    public function findCommentaireProduit($id)
+    public function findCommentaireProduitById($id)
         {
             return $this->createQueryBuilder('c')
                 ->innerJoin('c.unClient', 'client')
@@ -41,6 +41,29 @@ class CommentaireRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult();
         }
+
+    public function findCommentaireProduit(){
+        $com = $this->createQueryBuilder('c')
+        ->select(
+            'c.id AS idCom',        
+            'p.id AS idProduit',    
+            'cl.id AS idClient',    
+            'c.dateCommentaire', 
+            'c.contenuCommentaire', 
+            'c.noteCommentaire', 
+            'cl.nom', 
+            'cl.prenom'
+        )
+        ->innerJoin('c.unClient', 'cl')
+        ->innerJoin('c.unProduit', 'p')
+        ->orderBy('c.dateCommentaire', 'DESC')
+        ->getQuery();
+    
+        return $com->getResult();
+    }
+    
+        
+        
 
 
 

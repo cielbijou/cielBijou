@@ -18,6 +18,7 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ path('catalogue') }}">Tous les produits</a></li>
                             <li><a class="dropdown-item" href="{{ path('catalogue_CielBijou') }}">Produits Ciel Bijou</a></li>
+                            <li><a class="dropdown-item" href="{{ path('catalogue_Promotion') }}">Promotion en cours</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -54,7 +55,7 @@
                     <button class="btn btn-outline-dark d-flex align-items-center" type="submit">
                         <i class="bi-cart-fill me-1"></i>
                         Panier
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">{{ app.session.get('nbproduitpanier') }}</span>
+                        <span id="labelNbProd" class="badge bg-dark text-white ms-1 rounded-pill">{{ app.session.get('nbproduitpanier') }}</span>
                     </button>
                 </a>
             </div>

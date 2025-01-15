@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Length;
 
 class PanierController extends AbstractController
 {
@@ -18,10 +19,12 @@ class PanierController extends AbstractController
         $panier = $session->get('panier', []);
         $panierAvecDonnee=[];
         foreach($panier as $id => $quantite){
-            $panierAvecDonnee[] = ['produit'=>$prodRepo->find($id), 'qte'=>$quantite];
+            $produit = $prodRepo->findPanier($id);
+            if(!empty($produit))
+                $panierAvecDonnee[] = ['produit'=>$prodRepo->findPanier($id), 'qte'=>$quantite];
+            else
+                $panierAvecDonnee[] = ['produit'=>$prodRepo->findById($id), 'qte'=>$quantite];
         }
-
-
 
         return $this->render('panier/index.html.twig', [
             'items' => $panierAvecDonnee,
@@ -49,11 +52,11 @@ class PanierController extends AbstractController
         else
             $panier[$id]=1;
         $session->set('panier', $panier);
-        $this->addFlash('panier', 'produit ajouté au panier');
 
         $session->set('nbproduitpanier', $this->nbProdPanier($session));
 
-        return $this->redirectToRoute('catalogue', [], RESPONSE::HTTP_SEE_OTHER);
+        return new Response($this->nbProdPanier($session));
+
     }
 
     public function nbProdPanier(SessionInterface $session){
@@ -73,11 +76,10 @@ class PanierController extends AbstractController
             $panier[$id]++;
 
         $session->set('panier', $panier);
-        $this->addFlash('panier', 'Vous avez ajouté une unité du produit dans votre commande');
 
         $session->set('nbproduitpanier', $this->nbProdPanier($session));
 
-        return $this->redirectToRoute('panier', [], RESPONSE::HTTP_SEE_OTHER);
+        return new Response($this->nbProdPanier($session));
 
 
     }
@@ -91,11 +93,10 @@ class PanierController extends AbstractController
             if($panier[$id]==0) unset($panier[$id]);
         }
         $session->set('panier', $panier);
-        $this->addFlash('panier', 'Vous avez enlevé une unité du produit dans votre commande');
 
         $session->set('nbproduitpanier', $this->nbProdPanier($session));
 
-        return $this->redirectToRoute('panier', [], RESPONSE::HTTP_SEE_OTHER);
+        return new Response($this->nbProdPanier($session));
 
 
     }
@@ -108,11 +109,10 @@ class PanierController extends AbstractController
             unset($panier[$id]);
         }
         $session->set('panier', $panier);
-        $this->addFlash('panier', 'Le produit a été supprimer de votre panier');
 
         $session->set('nbproduitpanier', $this->nbProdPanier($session));
 
-        return $this->redirectToRoute('panier', [], RESPONSE::HTTP_SEE_OTHER);
+        return new Response($this->nbProdPanier($session));
 
 
     }

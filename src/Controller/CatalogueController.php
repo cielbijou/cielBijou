@@ -66,7 +66,7 @@ class CatalogueController extends AbstractController
     }
     
     #[Route('/catalogue', name: 'catalogue')]
-    public function index(Request $request, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function index(Request $request,PromotionRepository $promotionRepository ,CommentaireRepository $commentaireRepository, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {
         $order = $request->request->get('ordre', 'croissant');
         $sortOrder = $this->getSortOrder($order);
@@ -75,12 +75,14 @@ class CatalogueController extends AbstractController
         return $this->render('catalogue/index.html.twig', [
             'produits' => $prod,
             'categories' => $categorieRepository->findAll(),
+            'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
+            'commentaire'=>$commentaireRepository->findCommentaireProduit(),
         ]);
     }
 
     #[Route('/catalogue/CielBijou', name: 'catalogue_CielBijou')]
-    public function indexCielBijou(Request $request, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function indexCielBijou(Request $request,PromotionRepository $promotionRepository ,CommentaireRepository $commentaireRepository, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {   
         
         $order = $request->request->get('ordre', 'croissant');
@@ -90,12 +92,14 @@ class CatalogueController extends AbstractController
         return $this->render('catalogue/index.html.twig', [
             'produits' => $produits,
             'categories' => $categorieRepository->findAll(),
+            'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
+            'commentaire'=>$commentaireRepository->findCommentaireProduit(),
         ]);
     }
 
     #[Route('/catalogue/CielBijou/Collection1', name: 'catalogue_Collection1')]
-    public function indexCollection1(Request $request,ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function indexCollection1(Request $request,PromotionRepository $promotionRepository ,CommentaireRepository $commentaireRepository,ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {   
         $order = $request->request->get('ordre', 'croissant');
         $sortOrder = $this->getSortOrder($order);
@@ -103,12 +107,14 @@ class CatalogueController extends AbstractController
         return $this->render('catalogue/index.html.twig', [
             'produits' => $prod,
             'categories' => $categorieRepository->findAll(),
+            'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
+            'commentaire'=>$commentaireRepository->findCommentaireProduit(),
         ]);
     }
 
     #[Route('/catalogue/CielBijou/Collection2', name: 'catalogue_Collection2')]
-    public function indexCollection2(Request $request, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function indexCollection2(Request $request,PromotionRepository $promotionRepository ,CommentaireRepository $commentaireRepository, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {
         $order = $request->request->get('ordre', 'croissant');
         $sortOrder = $this->getSortOrder($order); // 'ASC' ou 'DESC'
@@ -117,13 +123,15 @@ class CatalogueController extends AbstractController
         return $this->render('catalogue/index.html.twig', [
             'produits' => $prod,
             'categories' => $categorieRepository->findAll(),
+            'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
+            'commentaire'=>$commentaireRepository->findCommentaireProduit(),
         ]);
     }
 
     
     #[Route('/catalogue/CielBijou/Promotion', name: 'catalogue_Promotion')]
-    public function indexPromotion(Request $request,ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function indexPromotion(Request $request,CommentaireRepository $commentaireRepository, ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {
         $order = $request->request->get('ordre', 'croissant');
         $sortOrder = $this->getSortOrder($order); 
@@ -132,11 +140,12 @@ class CatalogueController extends AbstractController
             'produits' => $produits,
             'categories' => $categorieRepository->findAll(),
             'notes' => $this->Notation(),
+            'commentaire'=>$commentaireRepository->findCommentaireProduit(),
         ]);
     }
 
     #[Route('/catalogue/{id}', name: 'catalogue_cat')]
-    public function indexCat($id,Request $request,ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
+    public function indexCat($id,Request $request,PromotionRepository $promotionRepository ,CommentaireRepository $commentaireRepository,ProduitRepository $produitRepository, CategorieRepository $categorieRepository): Response
     {   
         $order = $request->request->get('ordre', 'croissant');
         $sortOrder = $this->getSortOrder($order);
@@ -144,16 +153,9 @@ class CatalogueController extends AbstractController
         return $this->render('catalogue/index.html.twig', [
             'produits' => $prod,
             'categories' => $categorieRepository->findAll(),
+            'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
-        ]);
-    }
-
-    #[Route('/catalogue/commentaire/{id}', name: 'catalogue_com')]
-    public function indexCom($id,ProduitRepository $produitRepository, CommentaireRepository $commentaireRepository): Response
-    {       
-        return $this->render('catalogue/commentaire.html.twig', [
-            'produit' => $produitRepository->find($id),
-            'commentaire'=>$commentaireRepository->findCommentaireProduit($id),
+            'commentaire'=>$commentaireRepository->findCommentaireProduit(),
         ]);
     }
 

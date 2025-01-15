@@ -11,11 +11,13 @@
             <div class="card-body">
                 <div class="row g-3 align-items-center">
                     <div class="col-md-3 text-center">
-                        {% if profil.Photo is not null %}
-                            <img src="{{ profil.displayPhoto }}" class="rounded-circle shadow-sm" height="150" alt="Photo de profil">
-                        {% else %}
-                            <img src="{{ asset('images/divers/identite.jpg') }}" class="rounded-circle shadow-sm" height="150" alt="Photo par défaut">
-                        {% endif %}
+                    {% if profil.Photo != null %}
+                        <img src='{{ profil.Photo }}' height="150">
+                        {# le probleme c'est surement que les images sont pas définis en blob dans la base de donnée #}
+                    {% else %}
+                        <img src="{{ asset('images/divers/identite.jpg') }}" class="rounded-circle shadow-sm" height="150" alt="Photo par défaut">
+                    {% endif %}
+                    
                     </div>
                     <div class="col-md-9">
                         <table class="table table-borderless">

@@ -6,15 +6,34 @@ use App\Entity\Client;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class ProfilInfoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('nom')
-            ->add('prenom')
+        ->add('email')
+        ->add('nom')
+        ->add('prenom')
+        ->add('photo', FileType::class, [
+            'required' => false,
+            'help' => '',
+            'label' => 'Choisissez votre fichier JPG ou PNG',
+            'data_class' => null,
+            'constraints' => [
+                new File([
+                    'maxSize' => '5M',
+                    'mimeTypes' => [
+                        'image/jpeg',
+                        'image/png',
+                    ],
+                    'mimeTypesMessage' => 'Merci de choisir un fichier JPG ou PNG valide',
+                ]),
+            ],
+        ])
         ;
     }
 

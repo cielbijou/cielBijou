@@ -19,7 +19,8 @@ class ProfileController extends AbstractController
     #[Route('/profil', name: 'profil_index', methods: ['GET'])]
     public function index(): Response
     {
-        $profil= $this->getUser();
+        $profil = $this->getUser();
+
         return $this->render('profil/index.html.twig', [
             'profil' => $profil,
         ]);
@@ -28,11 +29,17 @@ class ProfileController extends AbstractController
     #[Route('/editinfo', name: 'profil_editinfo', methods: ['GET', 'POST'])]
     public function editInfo(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $utilisateur=$this->getUser();
+        $utilisateur = $this->getUser();
         $form = $this->createForm(ProfilInfoType::class, $utilisateur);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (!$utilisateur->getPhoto()) {
+                $utilisateur->setPhoto(null);
+            } else {
+                $file = $utilisateur->getPhoto();
+                $utilisateur->setPhoto(file_get_contents($file));
+            }
             $entityManager->persist($utilisateur);
             $entityManager->flush();
 
@@ -44,5 +51,4 @@ class ProfileController extends AbstractController
             'form' => $form,
         ]);
     }
-
 }

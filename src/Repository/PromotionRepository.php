@@ -33,6 +33,13 @@ class PromotionRepository extends ServiceEntityRepository
            ;
        }
 
+       public function getCategoriePromo() : array {
+            return $this->createQueryBuilder('p')
+                ->orderBy('p.id', 'ASC')
+                ->getQuery()
+                ->getResult();
+       }
+
     //    public function findOneBySomeField($value): ?Promotion
     //    {
     //        return $this->createQueryBuilder('p')
