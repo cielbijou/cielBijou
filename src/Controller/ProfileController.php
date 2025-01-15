@@ -9,10 +9,14 @@ use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\LigneCommandeRepository;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProfileController extends AbstractController
 {
@@ -25,30 +29,59 @@ class ProfileController extends AbstractController
             'profil' => $profil,
         ]);
     }
-
+    
     #[Route('/editinfo', name: 'profil_editinfo', methods: ['GET', 'POST'])]
-    public function editInfo(Request $request, EntityManagerInterface $entityManager): Response
+    public function editInfo(Request $request, EntityManagerInterface $entityManager, ParameterBagInterface $params): Response
     {
         $utilisateur = $this->getUser();
         $form = $this->createForm(ProfilInfoType::class, $utilisateur);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!$utilisateur->getPhoto()) {
-                $utilisateur->setPhoto(null);
-            } else {
-                $file = $utilisateur->getPhoto();
-                $utilisateur->setPhoto(file_get_contents($file));
+            $photoFile = $form->get('photo')->getData();  // Récupère l'objet UploadedFile depuis le formulaire
+
+            if ($photoFile) {
+                // Dossier où les photos sont stockées
+                $photosDirectory = $params->get('photos_directory'); // défini dans services.yaml
+
+                // Créez un nom unique pour le fichier
+                $filename = uniqid() . '.' . $photoFile->guessExtension();
+
+                try {
+                    // Déplacez le fichier dans le dossier approprié
+                    $photoFile->move(
+                        $photosDirectory,
+                        $filename
+                    );
+
+                    // Enregistrez uniquement le chemin relatif dans la base de données
+                    $utilisateur->setPhoto('uploads/photos/' . $filename);  // Chemin relatif
+
+                } catch (FileException $e) {
+                    // Si une erreur survient lors de l'upload de l'image, afficher un message d'erreur
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                    return $this->redirectToRoute('profil_editinfo');
+                }
+            } elseif (!$photoFile) {
+                // Si aucune nouvelle photo n'est téléchargée, on garde la photo actuelle (aucune modification)
+                // Vous pouvez aussi gérer un cas où vous voulez supprimer la photo existante
+                // $utilisateur->setPhoto(null); // Si vous voulez supprimer la photo
             }
+
+            // Sauvegardez les modifications dans la base de données
             $entityManager->persist($utilisateur);
             $entityManager->flush();
 
+            // Redirigez vers le profil une fois l'édition effectuée
             return $this->redirectToRoute('profil_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('profil/editInfo.html.twig', [
             'utilisateur' => $utilisateur,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
+
+      
 }

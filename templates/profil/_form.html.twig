@@ -1,4 +1,5 @@
 {{ form_start(form, { 'attr': { 'class': 'form-group' } }) }}
+
     <div class="mb-3 row align-items-center">
         <label for="{{ form.email.vars.id }}" class="col-sm-3 col-form-label"><strong>Email</strong></label>
         <div class="col-sm-9">
@@ -20,6 +21,13 @@
         </div>
     </div>
 
+    <div class="mb-3 row align-items-center">
+        <label for="{{ form.photo.vars.id }}" class="col-sm-3 col-form-label"><strong>Photo</strong></label>
+        <div class="col-sm-9">
+            {{ form_widget(form.photo, { 'attr': { 'class': 'form-control' } }) }}
+        </div>
+    </div>
+
     <div class="d-flex justify-content-between mt-4">
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save"></i> {{ button_label|default('Enregistrer') }}
@@ -28,4 +36,7 @@
             <i class="fas fa-arrow-left"></i> Retourner à la liste
         </a>
     </div>
+
+    <input type="hidden" id="profil_info__token" name="profil_info[_token]" value="{{ csrf_token('profil_info') }}" />
+
 {{ form_end(form) }}

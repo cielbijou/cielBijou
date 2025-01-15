@@ -53,9 +53,9 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'unClient')]
     private Collection $commandes;
-
-    #[ORM\Column(type: Types::BLOB, nullable: true)]
-    private $Photo = null;
+    
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $photo = null;
 
     public function __construct()
     {
@@ -222,15 +222,14 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhoto()
+    public function getPhoto(): ?string
     {
-        return $this->Photo;
+        return $this->photo;
     }
-
-    public function setPhoto($Photo): static
+    
+    public function setPhoto(?string $photo): static
     {
-        $this->Photo = $Photo;
-
+        $this->photo = $photo;
         return $this;
     }
 }
