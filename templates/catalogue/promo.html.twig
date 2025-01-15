@@ -1,247 +1,236 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}Magasin{% endblock %}
 
 {% block body %}
-{% for message in app.flashes('panier') %}
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-<strong>{{message}}</strong>
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endfor %}
-<div class="container-fluid pt-3 pb-3">
-    <div class="row">
-<div class="col-md-2 filtre position-sticky" style="top: 20px;">
-<h5>Filtre</h5>
-<div class="row">
-    <div class="col-12">
-        <div class="card mb-3">
-            <p class="card-title m-1">Catégorie de bijoux</p>
-            {% for laCategorie in categories %}
-            <a href="{{ path('catalogue_cat',{'id' : laCategorie.id} )}}">
-                <button type="button" class="btn btn-light card-button m-2">{{laCategorie.libelleCat}}</button>
-            </a>                       
-            {% endfor %}
-            <a href="{{ path('catalogue')}}">
-                <button type="button" class="btn btn-light card-button m-2">Toutes les catégories</button>
-            </a>
+    {% for message in app.flashes('panier') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </div>
+    {% endfor %}
 
-    <div class="col-12">
-        <div class="card mb-3">
-            <p class="card-title m-1">Filtres Ciel Bijou</p>
-            <a href="{{path('catalogue_CielBijou')}}">
-                <button type="button" class="btn btn-light card-button m-2">Collection originale Ciel Bijou</button>
-            </a>
-            <a href="{{path('catalogue_Collection1')}}">
-                <button type="button" class="btn btn-light card-button m-2">Première collection Ciel Bijou</button>
-            </a>
-            <a href="{{path('catalogue_Collection2')}}">
-                <button type="button" class="btn btn-light card-button m-2">Deuxième collection Ciel Bijou</button>
-            </a>
-        </div>
-    </div>
-
-    <div class="col-12">
-    <div class="card mb-3">
-    <p class="card-title m-1">Filtres de prix</p>
-    <form method="POST" action="{{ path(app.request.attributes.get('_route'), { 'id': app.request.attributes.get('id') }) }}" class="bg-light p-3 rounded shadow-sm mb-4">
-        <input type="hidden" name="categorie" value="{{ app.request.query.get('categorie') }}">
-
-        <div class="form-group">
-            <label for="ordre" class="font-weight-bold mb-2">Trier par prix :</label>
-            <div class="custom-control custom-radio">
-                <input type="radio" id="prixCroissant" name="ordre" value="ASC" class="custom-control-input">
-                <label class="custom-control-label" for="prixCroissant">
-                    <i class="fas fa-sort-amount-up-alt mr-1"></i> Prix croissant
-                </label>
-            </div>
-            <div class="custom-control custom-radio mt-2">
-                <input type="radio" id="prixDecroissant" name="ordre" value="DESC" class="custom-control-input">
-                <label class="custom-control-label" for="prixDecroissant">
-                    <i class="fas fa-sort-amount-down mr-1"></i> Prix décroissant
-                </label>
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-3">
-            <i class="fas fa-filter mr-1"></i> Appliquer le tri
-        </button>
-</form>
-
-
-
-    </div>
-
-    </div>
-</div>
-</div>
-<div class="col-md-10">
-    <h5>Nos Produits en Promotion</h5>
-    <div class="container mt-3">
+    <div class="container-fluid pt-3 pb-3">
         <div class="row">
-        {% set libelleCat = "" %}
-        {% for unProduit in produits %}
-            {% if libelleCat != unProduit.libelleCat %}
-                <div class="text-center pb-4">
-                    {% if unProduit.libelleCat == "Bagues" %}
-                        <img src="{{ asset('images/divers/contourNomCategorie_Bagues.png') }}" style="width: 200px; height: 200px">
-                    {% elseif unProduit.libelleCat == "Collier" %}
-                        <img src="{{ asset('images/divers/contourNomCategorie_Collier.png') }}" style="width: 200px; height: 200px">
-                    {% elseif unProduit.libelleCat == "Bracelets" %}
-                        <img src="{{ asset('images/divers/contourNomCategorie_Bracelets.png') }}" style="width: 200px; height: 200px">
-                    {% endif %}
-                </div>
-            {% endif %}
-            {% set libelleCat = unProduit.libelleCat %}
-                <div class="col-md-6 mb-4">
-                    <div class="d-flex">
-                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px; width: 150px; flex-shrink: 0;">
-                            <img src="{{ asset('images/produit/' ~ unProduit.imageProd) }}" class="img-fluid" alt="Photo article">
+            <div class="col-md-2 filtre position-sticky" style="top: 20px;">
+                <h5>Filtre</h5>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-3">
+                            <p class="card-title m-1">Catégorie de bijoux</p>
+                            {% for laCategorie in categories %}
+                                <a href="{{ path('catalogue_cat', {'id' : laCategorie.id}) }}">
+                                    <button type="button" class="btn btn-light card-button m-2">{{ laCategorie.libelleCat }}</button>
+                                </a>
+                            {% endfor %}
+                            <a href="{{ path('catalogue') }}">
+                                <button type="button" class="btn btn-light card-button m-2">Toutes les catégories</button>
+                            </a>
                         </div>
-                        <div class="col-md-6 ms-3"> 
-                            <h5>{{ unProduit.nomProd }}</h5>
-                            <p>{{ unProduit.description }}</p>
-                            <p>
-                                <label style="text-decoration: line-through;">{{ unProduit.prixProd }} €</label>
-                                <label class="text-danger ms-2">
-                                    {{ (unProduit.prixProd * unProduit.remisePromo)|number_format(2, '.', ' ') }} €
-                                <label class="text-black ms-2">-{{(1- unProduit.remisePromo) * 100 }}%</label>
-                                </label>
-                            </p>
-                        <a id="btnCommentaire" onClick="commentaire('{{unProduit.id}}')" style="color: black;"><U>Voir les commentaires</U></a>
-                            <div class="mt-3">Note :
-                            {% set note_produit = 10 %} 
-                            {% for note in notes %}
+                    </div>
 
-                                {% if note.produitId == unProduit.id %}
-                                    {% set note_produit = note.note %}
+                    <div class="col-12">
+                        <div class="card mb-3">
+                            <p class="card-title m-1">Filtres Ciel Bijou</p>
+                            <a href="{{ path('catalogue_CielBijou') }}">
+                                <button type="button" class="btn btn-light card-button m-2">Collection originale Ciel Bijou</button>
+                            </a>
+                            <a href="{{ path('catalogue_Collection1') }}">
+                                <button type="button" class="btn btn-light card-button m-2">Première collection Ciel Bijou</button>
+                            </a>
+                            <a href="{{ path('catalogue_Collection2') }}">
+                                <button type="button" class="btn btn-light card-button m-2">Deuxième collection Ciel Bijou</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card mb-3">
+                            <p class="card-title m-1">Filtres de prix</p>
+                            <form method="POST" action="{{ path(app.request.attributes.get('_route'), { 'id': app.request.attributes.get('id') }) }}" class="bg-light p-3 rounded shadow-sm mb-4">
+                                <input type="hidden" name="categorie" value="{{ app.request.query.get('categorie') }}">
+
+                                <div class="form-group">
+                                    <label for="ordre" class="font-weight-bold mb-2">Trier par prix :</label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="prixCroissant" name="ordre" value="ASC" class="custom-control-input">
+                                        <label class="custom-control-label" for="prixCroissant">
+                                            <i class="fas fa-sort-amount-up-alt mr-1"></i> Prix croissant
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-radio mt-2">
+                                        <input type="radio" id="prixDecroissant" name="ordre" value="DESC" class="custom-control-input">
+                                        <label class="custom-control-label" for="prixDecroissant">
+                                            <i class="fas fa-sort-amount-down mr-1"></i> Prix décroissant
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary mt-3">
+                                    <i class="fas fa-filter mr-1"></i> Appliquer le tri
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <h5>Nos Produits en Promotion</h5>
+                <div class="container mt-3">
+                    <div class="row">
+                        {% set libelleCat = "" %}
+                        {% for unProduit in produits %}
+                            {% if libelleCat != unProduit.libelleCat %}
+                                <div class="text-center pb-4">
+                                    {% if unProduit.libelleCat == "Bagues" %}
+                                        <img src="{{ asset('images/divers/contourNomCategorie_Bagues.png') }}" style="width: 200px; height: 200px">
+                                    {% elseif unProduit.libelleCat == "Collier" %}
+                                        <img src="{{ asset('images/divers/contourNomCategorie_Collier.png') }}" style="width: 200px; height: 200px">
+                                    {% elseif unProduit.libelleCat == "Bracelets" %}
+                                        <img src="{{ asset('images/divers/contourNomCategorie_Bracelets.png') }}" style="width: 200px; height: 200px">
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            {% set libelleCat = unProduit.libelleCat %}
+                            <div class="col-md-6 mb-4">
+                                <div class="d-flex">
+                                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px; width: 150px; flex-shrink: 0;">
+                                        <img src="{{ asset('images/produit/' ~ unProduit.imageProd) }}" class="img-fluid" alt="Photo article">
+                                    </div>
+                                    <div class="col-md-6 ms-3"> 
+                                        <h5>{{ unProduit.nomProd }}</h5>
+                                        <p>{{ unProduit.description }}</p>
+                                        <p>
+                                            <label style="text-decoration: line-through;">{{ unProduit.prixProd }} €</label>
+                                            <label class="text-danger ms-2">
+                                                {{ (unProduit.prixProd * unProduit.remisePromo) | number_format(2, '.', ' ') }} €
+                                            </label>
+                                            <label class="text-black ms-2">-{{ (1 - unProduit.remisePromo) * 100 }}%</label>
+                                        </p>
+                                        <a id="btnCommentaire" onClick="commentaire('{{ unProduit.id }}')" style="color: black;"><u>Voir les commentaires</u></a>
+                                        <div class="mt-3">Note :
+                                            {% set note_produit = 10 %} 
+                                            {% for note in notes %}
+                                                {% if note.produitId == unProduit.id %}
+                                                    {% set note_produit = note.note %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="rating-static" data-rating="{{ note_produit }}">
+                                                {% if note_produit == 0 %}
+                                                    <span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                                {% elseif note_produit == 1 %}
+                                                    <span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                                {% elseif note_produit == 2 %}
+                                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                                {% elseif note_produit == 3 %}
+                                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                                {% elseif note_produit == 4 %}
+                                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span>
+                                                {% elseif note_produit == 5 %}
+                                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+                                                {% else %}
+                                                    <div class="small">Aucune note pour ce produit</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        {% if unProduit.stockProd < 5 %}
+                                            <div class="alert alert-danger mt-2" role="alert">
+                                                Stock restant : {{ unProduit.stockProd }}
+                                            </div>
+                                        {% endif %}
+
+                                        <a id="btnAjouter" onClick="ajouter('{{ path('panier_add', { 'id' : unProduit.id }) }}', {{ unProduit.id }})" class="btn btn-primary mt-2">Ajouter au panier</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% set lesCommentaires = [] %} 
+                            {% for com in commentaire %}
+                                {% if unProduit.id == com.idProduit %}
+                                    {% set lesCommentaires = lesCommentaires | merge([com]) %}
                                 {% endif %}
                             {% endfor %}
-                            <div class="rating-static" data-rating="{{ note_produit }}">
-                        
-                                {% if note_produit == 0 %}
-                                    <span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
-                                {% elseif note_produit == 1 %}
-                                    <span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
-                                {% elseif note_produit == 2 %}
-                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
-                                {% elseif note_produit == 3 %}
-                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
-                                {% elseif note_produit == 4 %}
-                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span>
-                                {% elseif note_produit == 5 %}
-                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
-                                {% elseif note_produit == 10 %}
-                                    <div class="small">Aucune note pour ce produit</div>
-                                {% else %}
-                                    <div class="small">Erreur dans le chargement de la note</div>
-                                {% endif %}
+                            
+                            <div class="modal fade" id="modal{{ unProduit.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Commentaire</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>{{ unProduit.nomProd }}</h5>
+                                            <div>{{ unProduit.description }}</div>
+                                            <div class="text-center"><img src="{{ asset('images/produit/' ~ unProduit.imageProd) }}" class="img-fluid" alt="Photo article"/></div>
+                                            <h5>Commentaires</h5>
+                                            {% if lesCommentaires | length > 0 %}
+                                                <ul class="list-group">
+                                                    {% for comment in lesCommentaires %}
+                                                        <li class="list-group-item">
+                                                            <div class="d-flex justify-content-between">
+                                                                <strong>{{ comment.nom }} {{ comment.prenom }}</strong>
+                                                                <div class="rating-static" data-rating="{{ comment.noteCommentaire }}">
+                                                                    {% if comment.noteCommentaire == 0 %}
+                                                                        <span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                                                    {% elseif comment.noteCommentaire == 1 %}
+                                                                        <span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                                                    {% elseif comment.noteCommentaire == 2 %}
+                                                                        <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                                                    {% elseif comment.noteCommentaire == 3 %}
+                                                                        <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
+                                                                    {% elseif comment.noteCommentaire == 4 %}
+                                                                        <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span>
+                                                                    {% elseif comment.noteCommentaire == 5 %}
+                                                                        <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+                                                                    {% else %}
+                                                                        <div class="small">Erreur dans le chargement de la note</div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <small class="text-muted">{{ comment.dateCommentaire | date('d/m/Y') }}</small>
+                                                            </div>
+                                                            <p class="mb-1">{{ comment.contenuCommentaire }}</p>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% else %}
+                                                <p class="text-muted">Aucun commentaire pour ce produit pour le moment.</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ path('catalogue') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Retourner au catalogue</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        {% if unProduit.stockProd < 5 %}
-                            <div class="alert alert-danger mt-2" role="alert">
-                                Stock restant : {{ unProduit.stockProd }}
-                            </div>
-                        {% endif %}
-
-                    <a id="btnAjouter" onClick="ajouter('{{path('panier_add',{ 'id' : unProduit.id}) }}', {{unProduit.id}})" class="btn btn-primary mt-2">Ajouter au panier</a>
-                        </div>
-                    </div>
-                </div>
-                {% set lesCommentaires = [] %} 
-                {% for com in commentaire %}
-                    {% if unProduit.id == com.idProduit %}
-                        {% set lesCommentaires = lesCommentaires | merge([com]) %}
-                    {% endif %}
-                {% endfor %}
-                
-                <div class="modal fade" id="modal{{unProduit.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Commentaire</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <h5>{{unProduit.nomProd}}</h5>
-                            <div>{{ unProduit.description }}</div>
-                            <div class="text-center"><img src="{{ asset('images/produit/' ~ unProduit.imageProd) }}" class="img-fluid" alt="Photo article"/></div>
-                            <h5>Commentaires</h5>
-                                {% if lesCommentaires|length > 0 %}
-                                    <ul class="list-group">
-                                    {% for comment in lesCommentaires %}
-                                        <li class="list-group-item">
-                                            <div class="d-flex justify-content-between">
-                                                <!-- Affiche le nom du client -->
-                                                <strong>{{ comment.nom }} {{ comment.prenom }}</strong>
-
-                                                <div class="rating-static" data-rating="{{ comment.noteCommentaire }}">
-                                                    {% if comment.noteCommentaire == 0 %}
-                                                        <span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
-                                                    {% elseif comment.noteCommentaire == 1 %}
-                                                        <span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
-                                                    {% elseif comment.noteCommentaire == 2 %}
-                                                        <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
-                                                    {% elseif comment.noteCommentaire == 3 %}
-                                                        <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span><span class="star">&#9734;</span>
-                                                    {% elseif comment.noteCommentaire == 4 %}
-                                                        <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9734;</span>
-                                                    {% elseif comment.noteCommentaire == 5 %}
-                                                        <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
-                                                    {% else %}
-                                                        <div class="small">Erreur dans le chargement de la note</div>
-                                                    {% endif %}
-                                                </div>
-                                                <small class="text-muted">{{ comment.dateCommentaire|date('d/m/Y') }}</small>
-                                            </div>
-                                            <p class="mb-1">{{ comment.contenuCommentaire }}</p>
-                                        </li>
-                                    <p></p>
-                                    {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <p class="text-muted">Aucun commentaire pour ce produit pour le moment.</p>
-                                {% endif %}
-                        </div>
-                        <div class="modal-footer">
-                            <a href="{{ path('catalogue') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Retourner au catalogue</a>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-    {% endfor %}
-</div>
-
-</div>
-
+        </div>
     </div>
-</div>
 {% endblock %}
 
-
-
 {% block javascripts %}
-{{ parent() }}
-<script>
-    function commentaire(id) {
-        var modal = new bootstrap.Modal(document.getElementById('modal' + id));
-        modal.show();
-    }
+    {{ parent() }}
+    <script>
+        function commentaire(id) {
+            var modal = new bootstrap.Modal(document.getElementById('modal' + id));
+            modal.show();
+        }
 
-    function ajouter(route, id){
-        var xhr = new XMLHttpRequest;
-        xhr.onreadystatechange = function() {
-            if(xhr.readyState == 4 && xhr.status == 200){
-                value = xhr.responseText;
-                document.getElementById('labelNbProd').textContent = value;
-            }
-        };
-        xhr.open("GET", route, true);
-        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-        xhr.send();
-    }
-</script>
-
+        function ajouter(route, id){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    value = xhr.responseText;
+                    document.getElementById('labelNbProd').textContent = value;
+                }
+            };
+            xhr.open("GET", route, true);
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            xhr.send();
+        }
+    </script>
 {% endblock %}

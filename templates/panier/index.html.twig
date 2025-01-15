@@ -1,71 +1,77 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panier{% endblock %}
+{% block title %}Panier - Ciel Bijoux{% endblock %}
 
 {% block body %}
 {% for message in app.flashes('panier') %}
 <div class="alert alert-success alert-dismissible fade show" role="alert">
-<strong>{{message}}</strong>
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <strong>{{message}}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endfor %}
 {% if items|length > 0 %}
 <div id="plein" class="container mt-4">
     <div class="row">
-    {% set prixProd = 0 %}
-    {% set total = 0 %}
+        {% set prixProd = 0 %}
+        {% set total = 0 %}
         {% for Prod in items %}
         {% set produit = Prod.produit[0] %}
         <div id="supp{{produit.id}}">
             <div class="col-12 mb-3">
-            <div class="d-flex justify-content-between align-items-center p-3">
-                <div class="d-flex align-items-center" style="width: 150px;">
-                    <img src="{{asset('images/produit/'~produit.imageProd)}}" class="img-fluid" alt="Produit 1">
-                </div>
-
-                <div class="d-flex flex-column align-items-start" style="width: 200px;">
-                    <strong>{{produit.nomProd}}</strong>
-                    <p class="mb-0">{{produit.description}}</p>
-                </div>
-                {% if produit.remisePromo is defined %}
-                    {% set prixProd = (produit.prixProd * produit.remisePromo)|number_format(2, '.', ' ') %}
-                    <div class="d-flex align-items-center" style="width: 100px;">
-                        <span><strong>{{prixProd}}€</strong></span>
+                <div class="d-flex justify-content-between align-items-center p-4 bg-light shadow-lg rounded">
+                    <div class="d-flex align-items-center" style="width: 150px;">
+                        <img src="{{asset('images/produit/'~produit.imageProd)}}" class="img-fluid" alt="Produit {{produit.nomProd}}" style="max-height: 100px;">
                     </div>
-                {% else %}
-                {% set prixProd = produit.prixProd %}
-                <div class="d-flex align-items-center" style="width: 100px;">
-                    <span><strong>{{prixProd}}€</strong></span>
+
+                    <div class="d-flex flex-column align-items-start" style="width: 250px;">
+                        <h5 class="text-dark">{{produit.nomProd}}</h5>
+                        <p class="mb-0 text-muted">{{produit.description}}</p>
+                    </div>
+
+                    {% if produit.remisePromo is defined %}
+                        {% set prixProd = (produit.prixProd * produit.remisePromo)|number_format(2, '.', ' ') %}
+                        <div class="d-flex align-items-center" style="width: 120px;">
+                            <span><strong>{{prixProd}}€</strong></span>
+                        </div>
+                    {% else %}
+                        {% set prixProd = produit.prixProd %}
+                        <div class="d-flex align-items-center" style="width: 120px;">
+                            <span><strong>{{prixProd}}€</strong></span>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex align-items-center">
+                        <a onClick="moins('{{ path('panier_moins', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd}}, {{Prod.qte}})">
+                            <button class="btn btn-outline-secondary btn-sm">-</button>
+                        </a>
+                        <input type="text" class="form-control text-center mx-2" id="qte{{produit.id}}" value="{{Prod.qte}}" style="width: 50px;" readonly>
+                        <a onClick="plus('{{ path('panier_plus', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd}}, {{Prod.qte}})">
+                            <button class="btn btn-outline-secondary btn-sm">+</button>
+                        </a>
+                    </div>
+
+                    <a onClick="supprimer('{{ path('panier_remove', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd * Prod.qte}})">
+                        <button class="btn btn-danger btn-sm">
+                            Supprimer
+                        </button>
+                    </a>
                 </div>
-                {% endif %}
-                <div class="d-flex align-items-center">
-                    <a onClick="moins('{{ path('panier_moins', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd}}, {{Prod.qte}})"><button class="btn btn-outline-secondary btn-sm">-</button></a>
-                    <input type="text" class="form-control text-center mx-2" id="qte{{produit.id}}" value="{{Prod.qte}}" style="width: 50px;" readonly>
-                    <a onClick="plus('{{ path('panier_plus', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd}}, {{Prod.qte}})"><button class="btn btn-outline-secondary btn-sm">+</button></a>
-                </div>
-                <a onClick="supprimer('{{ path('panier_remove', {'id'  : produit.id}) }}', {{produit.id}},{{prixProd * Prod.qte}})">
-                <button class="btn btn-danger btn-sm d-flex align-items-center">
-                    Supprimer
-                </button>
-                </a>
-        
             </div>
-        </div>
-        <hr>
+            <hr>
         </div>
         {% set total = total + prixProd * Prod.qte %}
         {% endfor %}
         <div class="col-12 mb-3">
             <div class="d-flex justify-content-end mt-4">
-                <div>Prix total du panier : &nbsp </div>
-                <div id="total">{{total}} €</div>
+                <div class="fs-5">Prix total du panier :</div>
+                <div id="total" class="fs-4 text-success fw-bold ms-2">{{total}} €</div>
             </div>
         </div>
     </div>
 
-    <div class="d-flex justify-content-end mt-4">
-        <a href="{{path('panier_vider')}}"><button class="btn btn-danger">Vider le panier</button></a>
-        <a href="{{path('commande')}}"><button class="btn btn-primary">Valider le panier</button></a>
+    <div class="d-flex justify-content-between mt-4">
+        <a href="{{path('panier_vider')}}" class="btn btn-danger py-2 px-4 rounded-pill shadow-sm">Vider le panier</a>
+        <a href="{{path('commande')}}" class="btn btn-primary py-2 px-4 rounded-pill shadow-sm">Valider le panier</a>
     </div>
 </div>
 {% else %}
@@ -81,79 +87,63 @@
         </a>
     </div>
 </div>
-
 {% endif %}
-
 {% endblock %}
-
 
 {% block javascripts %}
 {{ parent() }}
-    <script>
+<script>
+    function updateTotal(amount) {
+        let total = parseFloat(document.getElementById('total').textContent.replace(' €', ''));
+        total += amount;
+        if (total > 0) {
+            document.getElementById('total').textContent = total.toFixed(2) + ' €';
+        } else {
+            location.reload();
+        }
+    }
 
-        function updateTotal(amount) {
-            let total = parseFloat(document.getElementById('total').textContent.replace(' €', ''));
-            total += amount;
-            const plein = document.getElementById('plein');
-            const vide = document.getElementById('vide');
-        
-            if (total > 0) 
-                document.getElementById('total').textContent = total.toFixed(2) + ' €';
-            else
-                location.reload();
-        }
-        
-        
-            
-        
-        function moins(route, id, prix, qte) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    value = xhr.responseText;
-                    document.getElementById('labelNbProd').textContent = value;
-                    document.getElementById('qte' + id).value = parseInt(document.getElementById('qte' + id).value) - 1;
-                    if (document.getElementById('qte' + id).value == 0) document.getElementById('supp' + id).style.display = 'none';
-        
-                    updateTotal(-prix);
-                }
-            };
-            xhr.open("GET", route, true);
-            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-            xhr.send();
-        }
-        
-        function plus(route, id, prix) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    value = xhr.responseText;
-                    document.getElementById('labelNbProd').textContent = value;
-                    document.getElementById('qte' + id).value = parseInt(document.getElementById('qte' + id).value) + 1;
-        
-                    updateTotal(prix);
-                }
-            };
-            xhr.open("GET", route, true);
-            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-            xhr.send();
-        }
-        
-        function supprimer(route, id, prix) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    value = xhr.responseText;
-                    document.getElementById('labelNbProd').textContent = value;
-                    document.getElementById('supp' + id).style.display = 'none';
-        
-                    updateTotal(-prix);
-                }
-            };
-            xhr.open("GET", route, true);
-            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-            xhr.send();
-        }
-        
-    </script>
+    function moins(route, id, prix, qte) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                value = xhr.responseText;
+                document.getElementById('qte' + id).value = parseInt(document.getElementById('qte' + id).value) - 1;
+                if (document.getElementById('qte' + id).value == 0) document.getElementById('supp' + id).style.display = 'none';
+                updateTotal(-prix);
+            }
+        };
+        xhr.open("GET", route, true);
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.send();
+    }
+
+    function plus(route, id, prix) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                value = xhr.responseText;
+                document.getElementById('qte' + id).value = parseInt(document.getElementById('qte' + id).value) + 1;
+                updateTotal(prix);
+            }
+        };
+        xhr.open("GET", route, true);
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.send();
+    }
+
+    function supprimer(route, id, prix) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                value = xhr.responseText;
+                document.getElementById('supp' + id).style.display = 'none';
+                updateTotal(-prix);
+            }
+        };
+        xhr.open("GET", route, true);
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.send();
+    }
+</script>
 {% endblock %}

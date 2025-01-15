@@ -3,23 +3,27 @@
 {% block title %}Accueil - Ciel Bijoux{% endblock %}
 
 {% block body %}
+<!-- Affichage des messages flash -->
 {% for message in app.flashes('panier') %}
 <div class="alert alert-success alert-dismissible fade show" role="alert">
-<strong>{{message}}</strong>
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <strong>{{message}}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endfor %}
-<!-- Section principale avec image de la nouvelle collection -->
-    <div  class="background">
-        <div class="button-container">
-        </div>
-    </div>
-    
-    <div class="container" style="margin:auto">
-        <div class="container-fluid p-0">
 
-        <!-- Carrousel des produits -->
-        <div class="row mt-4">
+<!-- Section principale avec image de la nouvelle collection -->
+<section class="background text-center text-white py-5" style="background-image: url('images/home.jpg'); background-size: cover;">
+    <div class="container py-5">
+        <h1 class="display-4 text-shadow">Nouvelle Collection Ciel Bijoux</h1>
+        <p class="lead">Laissez-vous séduire par notre nouvelle gamme de bijoux élégants et raffinés.</p>
+        <a href="#carrousel" class="btn btn-light btn-lg mt-3">Explorer</a>
+    </div>
+</section>
+
+<!-- Carrousel des produits -->
+<section id="carrousel" class="my-5">
+    <div class="container">
+        <div class="row">
             <div class="col-12">
                 <div id="demo" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-indicators">
@@ -31,7 +35,7 @@
                         {% set nb = 1 %}
                         {% for col in collection %}
                             <div class="carousel-item {% if nb == 1 %}active{% endif %}">
-                                <img src="{{ asset('images/produit/' ~ col.imageProd) }}" class="d-block w-100 rounded" alt="{{ col.nomProd }}" style="object-fit: cover; height: 400px;">
+                                <img src="{{ asset('images/produit/' ~ col.imageProd) }}" class="d-block w-100 rounded shadow-lg" alt="{{ col.nomProd }}" style="object-fit: cover; height: 400px;">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5 class="text-white">{{ col.nomProd }}</h5>
                                     <p class="text-white">{{ col.description }}</p>
@@ -49,142 +53,123 @@
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <!-- Section texte "Découvrez notre nouvelle collection" -->
-        <div class="row my-5">
-            <div class="col-12 col-md-6 d-flex align-items-center">
-                <div>
-                    <h2 class="text-primary">Découvrez la nouvelle Collection Ciel Bijoux</h2>
-                    <ul class="list-unstyled mt-3">
-                        <li><i class="bi bi-gem"></i> Bague</li>
-                        <li><i class="bi bi-gem"></i> Collier</li>
-                        <li><i class="bi bi-gem"></i> Boucle d'oreille</li>
-                    </ul>
+<!-- Section "Découvrez notre nouvelle collection" -->
+<section class="container my-5 text-center">
+    <h2 class="text-primary mb-4">Découvrez la nouvelle Collection Ciel Bijoux</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <img src="images/divers/contourNomCategorie_Bagues.png" class="card-img-top" alt="Bague">
+                <div class="card-body">
+
+                    <h5 class="card-title">Bague</h5>
+                    <p class="card-text">Élégance et finesse, nos bagues sont conçues pour sublimer chaque moment de votre vie.</p>
+                    <a href="#" class="btn btn-primary">Voir plus</a>
                 </div>
             </div>
         </div>
-
-        <!-- Section Bienvenue -->
-        <div class="bg-primary text-white text-center py-5">
-            <h1>Bienvenue chez Ciel Bijoux</h1>
-            <p>Votre partenaire de confiance pour des bijoux d'exception</p>
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <img src="images/divers/contourNomCategorie_Collier.png" class="card-img-top" alt="Collier">
+                <div class="card-body">
+                    <h5 class="card-title">Collier</h5>
+                    <p class="card-text">Des colliers somptueux pour un style audacieux et intemporel.</p>
+                    <a href="#" class="btn btn-primary">Voir plus</a>
+                </div>
+            </div>
         </div>
-
-        <!-- À propos de nous -->
-        <section class="container my-5">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center text-primary">À Propos de Nous</h2>
-                    <p class="text-muted">
-                        Ciel Bijoux est une entreprise passionnée par la création et la vente de bijoux raffinés. 
-                        Notre mission est d'apporter une touche d'élégance et de sophistication à votre style grâce à des pièces uniques et de qualité. 
-                        Avec des années d'expérience dans l'industrie de la bijouterie, nous nous engageons à offrir des produits qui illuminent vos moments précieux.
-                    </p>
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <img src="images/divers/contourNomCategorie_Boucle.png" class="card-img-top" alt="Boucles d'oreilles">
+                <div class="card-body">
+                    <h5 class="card-title">Boucles d'oreilles</h5>
+                    <p class="card-text">Nos boucles d'oreilles apportent une touche d'élégance à chaque tenue.</p>
+                    <a href="#" class="btn btn-primary">Voir plus</a>
                 </div>
             </div>
-        </section>
-
-        <!-- Nos créations -->
-        <section class="container my-5">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center text-primary">Nos Créations de Bijoux</h2>
-                    <p>Chez Ciel Bijoux, nous offrons une gamme complète de bijoux, adaptée à tous les goûts et toutes les occasions. Que vous recherchiez une pièce classique ou moderne, nous avons la solution parfaite pour vous.</p>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-diamond"></i> Bijoux en or, argent et pierres précieuses</li>
-                        <li><i class="bi bi-pencil"></i> Créations sur mesure selon vos envies</li>
-                        <li><i class="bi bi-chat-left-text"></i> Service client attentif et personnalisé</li>
-                    </ul>
-                    <p>En choisissant Ciel Bijoux, vous bénéficiez de nombreux avantages :</p>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-check-circle"></i> Produits de haute qualité, artisanaux et uniques</li>
-                        <li><i class="bi bi-truck"></i> Livraison rapide et sécurisée</li>
-                        <li><i class="bi bi-shield-lock"></i> Garanties sur tous nos bijoux</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sécurité et confiance -->
-        <section class="container my-5">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center text-primary">Sécurité et Confiance</h2>
-                    <p class="text-muted">
-                        La sécurité de vos achats est notre priorité absolue. Chez Ciel Bijoux, nous mettons en œuvre des mesures de sécurité avancées pour garantir la protection de vos informations. Nos engagements incluent :
-                    </p>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-lock"></i> Transactions sécurisées par cryptage SSL</li>
-                        <li><i class="bi bi-shield-check"></i> Politique de confidentialité rigoureuse</li>
-                        <li><i class="bi bi-person-check"></i> Service après-vente réactif et à l'écoute</li>
-                    </ul>
-                    <p>Avec Ciel Bijoux, vous pouvez acheter en toute sérénité, sachant que votre expérience est entre de bonnes mains.</p>
-                </div>
-            </div>
-        </section>
-
+        </div>
     </div>
+</section>
+
+<!-- Remplacer les trois images avec des icônes -->
+<section class="container my-5 text-center">
+    <h2 class="text-primary mb-4">Nos Bijoux Uniques</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <i class="bi bi-gem fs-1 text-primary"></i>
+                    <h5 class="card-title mt-3">Bijoux en Or</h5>
+                    <p class="card-text">Des créations somptueuses pour sublimer votre élégance.</p>
+                    <a href="#" class="btn btn-primary">Explorer</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <i class="bi bi-sun fs-1 text-primary"></i>
+                    <h5 class="card-title mt-3">Bijoux en Argent</h5>
+                    <p class="card-text">La douceur de l'argent pour des créations raffinées.</p>
+                    <a href="#" class="btn btn-primary">Explorer</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <i class="bi bi-diamond fs-1 text-primary"></i>
+                    <h5 class="card-title mt-3">Bijoux en Diamant</h5>
+                    <p class="card-text">Le luxe ultime pour vos moments précieux.</p>
+                    <a href="#" class="btn btn-primary">Explorer</a>
+                </div>
+            </div>
+        </div>
     </div>
+</section>
+
+<!-- Section "Sécurité et Confiance" -->
+<section class="bg-light text-dark py-5">
+    <div class="container">
+        <h2 class="text-center text-primary mb-4">Sécurité et Confiance</h2>
+        <p class="text-muted text-center">Chez Ciel Bijoux, nous mettons en œuvre des mesures de sécurité avancées pour garantir la protection de vos informations et de vos achats. Votre expérience d'achat est entre de bonnes mains.</p>
+    </div>
+</section>
 
 {% endblock %}
 
 {% block stylesheets %}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
-    <style>
-        .carousel-inner img {
-            object-fit: cover;
-            height: 400px;
-        }
-        .container-fluid {
-            padding: 0;
-        }
-        .bg-primary {
-            background-color: #3498db !important;
-        }
-        .text-primary {
-            color: #3498db;
-        }
-        .text-muted {
-            color: #7f8c8d;
-        }
-        .shadow-sm {
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-        }
-        .list-unstyled li {
-            margin-bottom: 10px;
-        }
-        h2 {
-            font-size: 2rem;
-        }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+    /* Effets de fond pour la section */
+    .background {
+        background-image: url('images/home.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 65vh;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        position: relative;
+        top: 30px;
+    }
 
-        .background{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-image: url("images/home.jpg"); /* Chemin de l'image de fond */
-            background-size: cover; /* Ajuster l'image pour couvrir toute la div */
-            background-position: center; /* Centrer l'image horizontalement */
-            height: 65vh; /* Hauteur maximale de 100% de la hauteur de l'écran */
-            color: white;
-            text-shadow: #000000 2px 2px 2px;
-            img{
-                height: 300px;
-            }
-        }
+    /* Effet shadow sur les cards */
+    .card.shadow-lg {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
+    /* Amélioration de l'alignement du texte */
+    h2, h3 {
+        font-size: 2rem;
+    }
 
-  
-  /* Effet au survol */
-  .styled-button:hover {
-    transform: scale(1.1); /* Agrandissement du bouton au survol */
-  }
-  
-  /* Effet de focus */
-  .styled-button:focus {
-    outline: none; /* Retire l'outline par défaut */
-    box-shadow: 0 0 10px rgba(72, 186, 64, 0.8); /* Ombre autour du bouton lors du focus */
-  }
-    </style>
+    /* Mise à jour de l'icône */
+    .fs-1 {
+        font-size: 3rem;
+    }
+</style>
 {% endblock %}
