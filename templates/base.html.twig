@@ -2,26 +2,95 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Ciel Bijoux{% endblock %}</title>
+
         {% block stylesheets %}
             <link href="{{ asset('css/bootstrap-5.3.1-dist/css/bootstrap.min.css') }}" rel="stylesheet">
-            <link href="{{ asset('css/bootstrap/css/styles.css')}}" rel="stylesheet" />
+            <link href="{{ asset('css/bootstrap/css/styles.css') }}" rel="stylesheet">
+            <style>
+                #suggestions {
+                    border: 1px solid #ccc;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    display: none;
+                    position: absolute;
+                    background: white;
+                    z-index: 1000;
+                }
+                .suggestion-item {
+                    padding: 8px;
+                    cursor: pointer;
+                }
+                .suggestion-item:hover {
+                    background-color: #f0f0f0;
+                }
+            </style>
         {% endblock %}
-        {% block javascripts %}
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-        {% endblock %}
-
     </head>
     <body>
-        {# Barre Navigation #}
+        {# Barre de navigation #}
         {% include "menu.html.twig" %}
-        
-            {% block body %}{% endblock %}
 
-        {# Footer #}
+        {# Contenu principal #}
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+
+        {# Pied de page #}
         <footer class="w-100">
             {% include "footer.html.twig" %}
         </footer>
+
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const searchInput = document.querySelector('#search-input');
+                    const suggestionsBox = document.querySelector('#suggestions');
+            
+                    if (searchInput && suggestionsBox) {
+                        searchInput.addEventListener('input', () => {
+                            const query = searchInput.value;
+            
+                            if (query.length > 2) {
+                                fetch(`/search-suggestions?q=${encodeURIComponent(query)}`)
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        if (data.length > 0) {
+                                            suggestionsBox.style.display = 'block';
+                                            suggestionsBox.innerHTML = data.map(item => 
+                                                `<a href="/product/${item.id}" class="list-group-item list-group-item-action suggestion-item">${item.nomProd}</a>`
+                                            ).join('');
+                                        } else {
+                                            suggestionsBox.style.display = 'none';
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('There was a problem with the fetch operation:', error);
+                                        suggestionsBox.style.display = 'none';
+                                    });
+                            } else {
+                                suggestionsBox.style.display = 'none';
+                            }
+                        });
+            
+                        document.addEventListener('click', (e) => {
+                            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                                suggestionsBox.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+            </script>
+            
+        {% endblock %}
     </body>
 </html>

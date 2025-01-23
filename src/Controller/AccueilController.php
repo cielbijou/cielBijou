@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Repository\CategorieRepository;
 use App\Repository\ProduitRepository;
+use App\Repository\PromotionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,4 +51,20 @@ class AccueilController extends AbstractController
             'conditions' => '',
         ]);
     }
+
+    #[Route('/search', name: 'product_search')]
+    public function search(Request $request,PromotionRepository $promotionRepository, CategorieRepository $categorieRepository, ProduitRepository $produitRepository): Response
+    {
+        $query = $request->query->get('q', '');
+        $products = $produitRepository->findByKeyword($query);
+
+        return $this->render('catalogue/results.html.twig', [
+            'produits' => $products,
+            'query' => $query,
+            'categories' => $categorieRepository->findAll(),
+            'promo' => $promotionRepository->getCategoriePromo(),
+        ]);
+    }
 }
+
+

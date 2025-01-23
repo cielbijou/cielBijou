@@ -145,4 +145,14 @@ class ProduitRepository extends ServiceEntityRepository
 
         }
 
+        public function findByKeyword(string $keyword): array
+    {
+    return $this->createQueryBuilder('p')
+        ->where('p.nomProd LIKE :keyword OR p.description LIKE :keyword')
+        ->setParameter('keyword', '%' . $keyword . '%')
+        ->getQuery()
+        ->getResult();
+    }
+
+
 }

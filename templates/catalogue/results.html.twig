@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats{% endblock %}
+
+{% block body %}
+<div class="container-fluid pt-3 pb-3">
+    {# Affichage des messages flash pour le panier #}
+    {% for message in app.flashes('panier') %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <div class="row">
+        {# Section des filtres #}
+        <aside class="col-md-2 filtre position-sticky" style="top: 20px;">
+            <h5>Filtrer</h5>
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <div class="card">
+                        <p class="card-title m-1">Catégories</p>
+                        {% for category in categories %}
+                        <a href="{{ path('catalogue_cat', {'id': category.id}) }}">
+                            <button type="button" class="btn btn-light card-button m-2">{{ category.libelleCat }}</button>
+                        </a>
+                        {% endfor %}
+                        <a href="{{ path('catalogue') }}">
+                            <button type="button" class="btn btn-light card-button m-2">Toutes les catégories</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <div class="card">
+                        <p class="card-title m-1">Collections</p>
+                        <a href="{{ path('catalogue_CielBijou') }}">
+                            <button type="button" class="btn btn-light card-button m-2">Ciel Bijou Original</button>
+                        </a>
+                        <a href="{{ path('catalogue_Collection1') }}">
+                            <button type="button" class="btn btn-light card-button m-2">Première Collection</button>
+                        </a>
+                        <a href="{{ path('catalogue_Collection2') }}">
+                            <button type="button" class="btn btn-light card-button m-2">Deuxième Collection</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <div class="card">
+                        <p class="card-title m-1">Trier par prix</p>
+                        <form method="POST" action="{{ path(app.request.attributes.get('_route'), { 'id': app.request.attributes.get('id') }) }}" class="p-3">
+                            <div class="form-check">
+                                <input type="radio" id="asc" name="ordre" value="ASC" class="form-check-input">
+                                <label class="form-check-label" for="asc">Prix croissant</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="desc" name="ordre" value="DESC" class="form-check-input">
+                                <label class="form-check-label" for="desc">Prix décroissant</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">Appliquer le tri</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        {# Section des résultats #}
+        <section class="col-md-10">
+            <h5>Résultats de la recherche</h5>
+            <div class="row">
+                {% for produit in produits %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 d-flex flex-row">
+                        <div class="p-3 d-flex align-items-center justify-content-center bg-light" style="width: 150px;">
+                            <img src="{{ asset('images/produit/' ~ produit.imageProd) }}" class="img-fluid" alt="{{ produit.nomProd }}">
+                        </div>
+                        <div class="card-body">
+                            <h5>{{ produit.nomProd }}</h5>
+                            <p>{{ produit.description }}</p>
+                            {% if produit.uneCategorie.id in promo|map(p => p.uneCategorie.id) %}
+                                {% set promoProduit = promo|filter(p => p.uneCategorie.id == produit.uneCategorie.id)|first %}
+                                <p>
+                                    <span style="text-decoration: line-through;">{{ produit.prixProd }} €</span>
+                                    <span class="text-danger">{{ (produit.prixProd * promoProduit.remisePromo)|number_format(2) }} €</span>
+                                </p>
+                            {% else %}
+                                <p>Prix : {{ produit.prixProd }} €</p>
+                            {% endif %}
+                            {% if produit.stockProd < 5 %}
+                            <div class="alert alert-danger mt-2" role="alert">
+                                Stock faible : {{ produit.stockProd }}
+                            </div>
+                            {% endif %}
+                            <a href="{{ path('panier_add', {'id': produit.id}) }}" class="btn btn-primary mt-2">Ajouter au panier</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12">
+                    <p class="text-muted">Aucun produit trouvé pour votre recherche.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
