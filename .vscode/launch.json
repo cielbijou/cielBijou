@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Symfony Local Web Server",
+        "type": "php",
+        "request": "launch",
+        "runtimeExecutable": "symfony",
+        "args": [
+          "server:start",
+          "-d"
+        ],
+        "cwd": "${workspaceFolder}",
+        "console": "internalConsole"
+      }
+    ]
+  }
+  
