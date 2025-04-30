@@ -24,9 +24,22 @@ class ProfileController extends AbstractController
     public function index(): Response
     {
         $profil = $this->getUser();
-
+        $photoData = null;
+        if($profil->getPhoto()){
+            $photo = $profil->getPhoto();
+            if (is_resource($photo)) {
+                $photoData = stream_get_contents($photo);
+            } elseif (is_string($photo)) {
+                $photoData = $photo;
+            }
+            
+            if ($photoData) {
+                $photoData = base64_encode($photoData);
+            }
+        }
         return $this->render('profil/index.html.twig', [
             'profil' => $profil,
+            'photoData' => $photoData,
         ]);
     }
     
@@ -41,31 +54,16 @@ class ProfileController extends AbstractController
             $photoFile = $form->get('photo')->getData();  // Récupère l'objet UploadedFile depuis le formulaire
 
             if ($photoFile) {
-                // Dossier où les photos sont stockées
-                $photosDirectory = $params->get('photos_directory'); // défini dans services.yaml
-
-                // Créez un nom unique pour le fichier
-                $filename = uniqid() . '.' . $photoFile->guessExtension();
-
                 try {
-                    // Déplacez le fichier dans le dossier approprié
-                    $photoFile->move(
-                        $photosDirectory,
-                        $filename
-                    );
-
-                    // Enregistrez uniquement le chemin relatif dans la base de données
-                    $utilisateur->setPhoto('uploads/photos/' . $filename);  // Chemin relatif
-
-                } catch (FileException $e) {
-                    // Si une erreur survient lors de l'upload de l'image, afficher un message d'erreur
-                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                    // Lire le contenu binaire du fichier téléchargé
+                    $photoData = file_get_contents($photoFile->getPathname());
+            
+                    // Enregistre le contenu binaire dans le champ 'photo' de l'utilisateur
+                    $utilisateur->setPhoto($photoData);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Erreur lors du traitement de l\'image.');
                     return $this->redirectToRoute('profil_editinfo');
                 }
-            } elseif (!$photoFile) {
-                // Si aucune nouvelle photo n'est téléchargée, on garde la photo actuelle (aucune modification)
-                // Vous pouvez aussi gérer un cas où vous voulez supprimer la photo existante
-                // $utilisateur->setPhoto(null); // Si vous voulez supprimer la photo
             }
 
             // Sauvegardez les modifications dans la base de données

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\BlobType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -54,8 +55,8 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'unClient')]
     private Collection $commandes;
     
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    private ?string $photo = null;
+    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    private $photo = null;
 
     public function __construct()
     {
@@ -222,14 +223,15 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhoto(): ?string
+    public function getPhoto()
     {
         return $this->photo;
     }
-    
-    public function setPhoto(?string $photo): static
+
+    public function setPhoto($photo): static
     {
         $this->photo = $photo;
+
         return $this;
     }
 }
