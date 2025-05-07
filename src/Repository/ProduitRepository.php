@@ -43,7 +43,7 @@ class ProduitRepository extends ServiceEntityRepository
 
     public function findById($id): array {
         return $this->createQueryBuilder('p')
-        ->select('p.id, p.nomProd, p.description, p.imageProd, p.prixProd')
+        ->select('p.id, p.nomProd, p.description, p.imageProd, p.prixProd, p.stockProd as stock')
         ->where('p.id = :id')
         ->setParameter('id', $id)
         ->getQuery()
@@ -52,12 +52,12 @@ class ProduitRepository extends ServiceEntityRepository
 
     public function findPanier($id) : array {
         return $this->createQueryBuilder('p')
-        ->select('p.id, p.nomProd, p.description, p.imageProd, p.prixProd, pr.remisePromo')
+        ->select('p.id, p.nomProd, p.description, p.imageProd, p.prixProd, pr.remisePromo, p.stockProd as stock')
         ->innerJoin(
-            'App\Entity\Categorie', // L'entité ou table pour la catégorie
-            'c',                   // Alias
-            'WITH',                // Clause personnalisée
-            'p.uneCategorie = c.id' // Condition personnalisée de la jointure
+            'App\Entity\Categorie', 
+            'c',                   
+            'WITH',                
+            'p.uneCategorie = c.id' 
         )
         ->innerJoin('App\Entity\Promotion','pr','WITH','p.uneCategorie = pr.uneCategorie')
         ->where('p.id = :id')

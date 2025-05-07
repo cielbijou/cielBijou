@@ -30,6 +30,15 @@ class CategorieRepository extends ServiceEntityRepository
            ;
        }
 
+       public function findName($id): string{
+        return $this->createQueryBuilder('c')
+                    ->select('c.libelleCat')
+                    ->andWhere('c.id = :id')
+                    ->setParameter('id', $id)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+       }
+
     //    public function findOneBySomeField($value): ?Categorie
     //    {
     //        return $this->createQueryBuilder('c')

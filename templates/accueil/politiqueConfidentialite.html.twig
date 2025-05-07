@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de Confidentialité – Ciel Bijoux{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <h1 class="mb-4 text-center">Politique de Confidentialité</h1>
+
+            <div class="accordion" id="privacyPolicyAccordion">
+                {% set sections = [
+                    {'title': '1. Introduction', 'content': 'La présente politique de confidentialité décrit comment Ciel Bijoux collecte, utilise, conserve et protège les données personnelles des utilisateurs de sa boutique en ligne. En utilisant notre site, vous acceptez les pratiques décrites dans ce document.'},
+                    {'title': '2. Identité du Responsable du Traitement', 'content': 'Le responsable du traitement des données est Ciel Bijoux, représenté par son fondateur/administrateur (à compléter), dont le siège social est situé à (adresse à compléter), joignable via (email ou téléphone à compléter).'},
+                    {'title': '3. Données Collectées', 'content': "
+                        <strong>3.1 Lors de la création d’un compte client :</strong><br>
+                        Nom, prénom<br>
+                        Adresse e-mail<br>
+                        Adresse postale<br>
+                        Numéro de téléphone<br>
+                        Historique des commandes<br><br>
+
+                        <strong>3.2 Lors de la navigation :</strong><br>
+                        Données de navigation (cookies, pages visitées, durée de visite)<br>
+                        Adresse IP<br>
+                        Appareil utilisé<br><br>
+
+                        <strong>3.3 Lors du paiement :</strong><br>
+                        Données de transaction (via un prestataire de paiement sécurisé – nous ne conservons pas les coordonnées bancaires)<br><br>
+
+                        <strong>3.4 Via les formulaires de contact ou avis :</strong><br>
+                        Nom, prénom<br>
+                        Adresse e-mail<br>
+                        Contenu du message ou de l’avis"
+                    },
+                    {'title': '4. Finalités du Traitement', 'content': 'Gérer les comptes clients, suivre les commandes, livraisons, SAV, répondre aux demandes, améliorer l’expérience utilisateur, gérer les avis et garantir la sécurité des transactions.'},
+                    {'title': '5. Base Légale du Traitement', 'content': 'Exécution d’un contrat, consentement (formulaires, cookies), intérêt légitime (amélioration des services) et obligations légales.'},
+                    {'title': '6. Durée de Conservation', 'content': 'Relation commerciale : durée active + 3 ans. Facturation : 10 ans (obligation légale).'},
+                    {'title': '7. Destinataires des Données', 'content': 'Prestataires techniques, logistiques et de paiement – tous soumis à des obligations de confidentialité et de sécurité.'},
+                    {'title': '8. Sécurité des Données', 'content': 'Hébergement sécurisé, chiffrement SSL/TLS, sauvegardes régulières, accès restreint aux données.'},
+                    {'title': '9. Vos Droits', 'content': 'Accès, rectification, effacement, limitation, portabilité, opposition, retrait du consentement. Contact : (adresse e-mail à compléter).'},
+                    {'title': '10. Cookies', 'content': 'Cookies de session, mesure d’audience, fonctionnels. Bandeau de consentement lors de la première visite.'},
+                    {'title': '11. Modification de la Politique', 'content': 'Ciel Bijoux se réserve le droit de modifier cette politique. Les changements seront publiés ici avec la date de mise à jour.'}
+                ] %}
+
+                {% for section in sections %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading{{ loop.index }}">
+                            <button class="accordion-button {% if not loop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="{{ loop.first ? 'true' : 'false' }}" aria-controls="collapse{{ loop.index }}">
+                                {{ section.title }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ loop.index }}" class="accordion-collapse collapse {% if loop.first %}show{% endif %}" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#privacyPolicyAccordion">
+                            <div class="accordion-body">
+                                {{ section.content|raw }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="{{ path('accueil') }}" class="btn btn-outline-primary">Retour à l'accueil</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

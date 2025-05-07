@@ -78,6 +78,7 @@ class CatalogueController extends AbstractController
             'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
             'commentaire'=>$commentaireRepository->findCommentaireProduit(),
+            'ordre' => $sortOrder,
         ]);
     }
 
@@ -95,6 +96,8 @@ class CatalogueController extends AbstractController
             'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
             'commentaire'=>$commentaireRepository->findCommentaireProduit(),
+            'titre' => 'Collection Ciel Bijou',
+            'ordre' => $sortOrder,
         ]);
     }
 
@@ -110,6 +113,8 @@ class CatalogueController extends AbstractController
             'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
             'commentaire'=>$commentaireRepository->findCommentaireProduit(),
+            'titre' => 'Première collection Ciel Bijou',
+            'ordre' => $sortOrder,
         ]);
     }
 
@@ -126,6 +131,8 @@ class CatalogueController extends AbstractController
             'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
             'commentaire'=>$commentaireRepository->findCommentaireProduit(),
+            'titre' => 'Seconde collection Ciel Bijou',
+            'ordre' => $sortOrder,
         ]);
     }
 
@@ -141,6 +148,7 @@ class CatalogueController extends AbstractController
             'categories' => $categorieRepository->findAll(),
             'notes' => $this->Notation(),
             'commentaire'=>$commentaireRepository->findCommentaireProduit(),
+            'ordre' => $sortOrder,
         ]);
     }
 
@@ -150,12 +158,15 @@ class CatalogueController extends AbstractController
         $order = $request->request->get('ordre', 'croissant');
         $sortOrder = $this->getSortOrder($order);
         $prod = $produitRepository->findByCategorie($id, $sortOrder);
+        $titre = $categorieRepository->findName($id);
         return $this->render('catalogue/index.html.twig', [
             'produits' => $prod,
             'categories' => $categorieRepository->findAll(),
             'promo' => $promotionRepository->getCategoriePromo(),
             'notes' => $this->Notation(),
             'commentaire'=>$commentaireRepository->findCommentaireProduit(),
+            'titre' => $titre,
+            'ordre' => $sortOrder,
         ]);
     }
 

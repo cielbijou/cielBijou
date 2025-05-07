@@ -51,13 +51,15 @@
         <div class="form-group">
             <label for="ordre" class="font-weight-bold mb-2">Trier par prix :</label>
             <div class="custom-control custom-radio">
-                <input type="radio" id="prixCroissant" name="ordre" value="ASC" class="custom-control-input">
-                <label class="custom-control-label" for="prixCroissant">
+                <input type="radio" id="prixCroissant" name="ordre" value="ASC" class="custom-control-input"
+                    {% if ordre == 'ASC' %}checked{% endif %}>
+                    <label class="custom-control-label" for="prixCroissant">
                     <i class="fas fa-sort-amount-up-alt mr-1"></i> Prix croissant
                 </label>
             </div>
             <div class="custom-control custom-radio mt-2">
-                <input type="radio" id="prixDecroissant" name="ordre" value="DESC" class="custom-control-input">
+                <input type="radio" id="prixDecroissant" name="ordre" value="DESC" class="custom-control-input"
+            {% if ordre == 'DESC' %}checked{% endif %}>
                 <label class="custom-control-label" for="prixDecroissant">
                     <i class="fas fa-sort-amount-down mr-1"></i> Prix décroissant
                 </label>
@@ -67,7 +69,7 @@
         <button type="submit" class="btn btn-primary mt-3">
             <i class="fas fa-filter mr-1"></i> Appliquer le tri
         </button>
-</form>
+    </form>
 
 
 
@@ -78,7 +80,14 @@
 </div>
 
         <div class="col-md-10">
+        {% if app.request.uri not in [
+            'http://192.168.151.20/CielBijou/public/catalogue',
+            'https://192.168.151.20/CielBijou/public/catalogue'
+        ] %}
+            <h5>{{titre}}</h5>
+        {% else %}
             <h5>Nos Produits</h5>
+        {% endif %}
             <div class="container mt-3">
                 <div class="row">
                     {% for produit in produits %}

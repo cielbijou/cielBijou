@@ -36,6 +36,9 @@ class Contact
     #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $politiqueConfidentialite = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -128,6 +131,18 @@ class Contact
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function isPolitiqueConfidentialite(): ?bool
+    {
+        return $this->politiqueConfidentialite;
+    }
+
+    public function setPolitiqueConfidentialite(bool $politiqueConfidentialite): static
+    {
+        $this->politiqueConfidentialite = $politiqueConfidentialite;
 
         return $this;
     }

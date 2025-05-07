@@ -9,6 +9,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endfor %}
+<div id="divMessage"></div>
 {% if items|length > 0 %}
 <div id="plein" class="container mt-4">
     <div class="row">
@@ -41,16 +42,21 @@
                     {% endif %}
 
                     <div class="d-flex align-items-center">
-                        <a onClick="moins('{{ path('panier_moins', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd}}, {{Prod.qte}})">
-                            <button class="btn btn-outline-secondary btn-sm">-</button>
-                        </a>
-                        <input type="text" class="form-control text-center mx-2" id="qte{{produit.id}}" value="{{Prod.qte}}" style="width: 50px;" readonly>
-                        <a onClick="plus('{{ path('panier_plus', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd}}, {{Prod.qte}})">
-                            <button class="btn btn-outline-secondary btn-sm">+</button>
-                        </a>
+                        <button onClick="moins('{{ path('panier_moins', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd}}, {{Prod.qte}})" 
+                                class="btn btn-outline-secondary btn-sm">-</button>
+                        
+                        <input type="text" class="form-control text-center mx-2" 
+                            id="qte{{produit.id}}" 
+                            value="{{Prod.qte}}" 
+                            style="width: 50px;" 
+                            readonly 
+                            data-stock="{{produit.stock}}">
+
+                        <button onClick="plus('{{ path('panier_plus', {'id': produit.id}) }}', {{produit.id}}, {{prixProd}}, {{Prod.qte}})" 
+                                class="btn btn-outline-secondary btn-sm">+</button>
                     </div>
 
-                    <a onClick="supprimer('{{ path('panier_remove', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd * Prod.qte}})">
+                    <a onClick="supprimer('{{ path('panier_remove', {'id'  : produit.id}) }}', {{produit.id}}, {{prixProd * Prod.qte}}, {{Prod.qte}})">
                         <button class="btn btn-danger btn-sm">
                             Supprimer
                         </button>
@@ -71,7 +77,7 @@
 
     <div class="d-flex justify-content-between mt-4">
         <a href="{{path('panier_vider')}}" class="btn btn-danger py-2 px-4 rounded-pill shadow-sm">Vider le panier</a>
-        <a href="{{path('commande')}}" class="btn btn-primary py-2 px-4 rounded-pill shadow-sm">Valider le panier</a>
+        <a href="{{path('commande')}}" id="btn-valider" class="btn btn-primary py-2 px-4 rounded-pill shadow-sm" onclick="return verifierStocksAvantCommande()">Valider le panier</a>
     </div>
 </div>
 {% else %}
@@ -93,23 +99,83 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
+    function verifierStocks() {
+        const problemes = [];
+        let tousStocksOk = true;
+        
+        document.querySelectorAll('[id^="qte"]').forEach(input => {
+            const produitId = input.id.replace('qte', '');
+            const qte = parseInt(input.value);
+            const stock = parseInt(input.dataset.stock);
+            
+            if (qte > stock) {
+                tousStocksOk = false;
+                const nomProduit = document.querySelector(`#supp${produitId} h5`).textContent;
+                problemes.push({
+                    id: produitId,
+                    nom: nomProduit,
+                    manquant: qte - stock
+                });
+                
+                input.closest('.bg-light').classList.add('border', 'border-danger');
+            } else {
+                input.closest('.bg-light').classList.remove('border', 'border-danger');
+            }
+        });
+
+        return {
+            valide: tousStocksOk,
+            problemes: problemes
+        };
+    }
+
+    function verifierStocksAvantCommande() {
+        const verification = verifierStocks();
+        
+        if (!verification.valide) {
+            const messages = verification.problemes.map(p => 
+                `• ${p.nom} : ${p.manquant} unité(s) manquante(s)`
+            ).join('\n');
+            
+            document.getElementById('divMessage').innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Problèmes de stock :</strong><br>
+                    ${messages.replace(/\n/g, '<br>')}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            
+            return false;
+        }
+        return true;
+    }
+
     function updateTotal(amount) {
-        let total = parseFloat(document.getElementById('total').textContent.replace(' €', ''));
-        total += amount;
-        if (total > 0) {
-            document.getElementById('total').textContent = total.toFixed(2) + ' €';
-        } else {
+        const totalElement = document.getElementById('total');
+        let total = parseFloat(totalElement.textContent.replace(' €', '').replace(/\s/g, ''));
+        total = (total + amount).toFixed(2);
+        totalElement.textContent = total + ' €';
+        
+        if (total <= 0) {
             location.reload();
         }
+        verifierStocks();
     }
 
     function moins(route, id, prix, qte) {
-        var xhr = new XMLHttpRequest();
+        const currentQte = parseInt(document.getElementById('qte' + id).value);
+        
+        if (currentQte <= 1) {
+            if (confirm('Voulez-vous supprimer ce produit du panier ?')) {
+                supprimer(route.replace('moins', 'remove'), id, prix, qte);
+            }
+            return;
+        }
+
+        const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                value = xhr.responseText;
-                document.getElementById('qte' + id).value = parseInt(document.getElementById('qte' + id).value) - 1;
-                if (document.getElementById('qte' + id).value == 0) document.getElementById('supp' + id).style.display = 'none';
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('qte' + id).value = currentQte - 1;
                 updateTotal(-prix);
             }
         };
@@ -118,12 +184,19 @@
         xhr.send();
     }
 
-    function plus(route, id, prix) {
-        var xhr = new XMLHttpRequest();
+    function plus(route, id, prix, qte) {
+        const currentQte = parseInt(document.getElementById('qte' + id).value);
+        const stockMax = parseInt(document.getElementById('qte' + id).dataset.stock);
+
+        if (currentQte >= stockMax) {
+            stock('+');
+            return;
+        }
+
+        const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                value = xhr.responseText;
-                document.getElementById('qte' + id).value = parseInt(document.getElementById('qte' + id).value) + 1;
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('qte' + id).value = currentQte + 1;
                 updateTotal(prix);
             }
         };
@@ -132,18 +205,39 @@
         xhr.send();
     }
 
-    function supprimer(route, id, prix) {
-        var xhr = new XMLHttpRequest();
+    function supprimer(route, id, prix, quantite) {
+        const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                value = xhr.responseText;
-                document.getElementById('supp' + id).style.display = 'none';
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('supp' + id).remove();
                 updateTotal(-prix);
+                
+                if (document.querySelectorAll('[id^="supp"]').length === 0) {
+                    location.reload();
+                }
             }
         };
         xhr.open("GET", route, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.send();
+    }
+
+    function stock(indicateur) {
+        const divMessage = document.getElementById('divMessage');
+        divMessage.innerHTML = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Stock insuffisant pour ce produit</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        
+        setTimeout(() => {
+            const alert = divMessage.querySelector('.alert');
+            if (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 3000);
     }
 </script>
 {% endblock %}

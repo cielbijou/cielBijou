@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Contact;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,6 +25,9 @@ class ContactType extends AbstractType
                     'Demande de renseignements sur le magasin' => 'Demande de renseignements sur le magasin',
                     'Service après-vente' => 'Service après-vente'],])
             ->add('message')
+            ->add('politiqueConfidentialite', CheckboxType::class, [
+                'label' => 'J’accepte la politique de confidentialité',
+            ]);
         ;
     }
 

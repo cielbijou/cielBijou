@@ -1,4 +1,4 @@
-<div class="d-flex align-items-center">
+<div class="d-flex align-items-center fixed-top">
     <img class="pr-4" width="55" height="55" src="{{ asset('images/divers/Ciel.png') }}" alt="Logo Ciel Bijou">
     <nav class="navbar navbar-expand-lg navbar-light flex-grow-1">
         <div class="container px-3 px-lg-3">
@@ -55,7 +55,7 @@
                     <button class="btn btn-outline-dark d-flex align-items-center" type="submit">
                         <i class="bi-cart-fill me-1"></i>
                         Panier
-                        {# <span id="labelNbProd" class="badge bg-dark text-white ms-1 rounded-pill">{{ app.session.get('nbproduitpanier') }}</span> #}
+                        <span id="labelNbProd" class="badge bg-dark text-white ms-1 rounded-pill">{{ app.session.get('nbproduitpanier') }}</span>
                     </button>
                 </a>
             </div>
@@ -71,28 +71,27 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
 
-/* Généralement, on veut un fond plus léger et plus moderne */
 .navbar {
-    background-color: #f8f9fa; /* Fond clair */
-    border-bottom: 2px solid #e0e0e0; /* Ligne de séparation fine */
+    background-color: #f8f9fa; 
+    border-bottom: 2px solid #e0e0e0;
 }
 
-/* Style du logo */
+
 .navbar-brand img {
-    border-radius: 50%; /* Pour un effet rond sur l'image */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Une petite ombre portée pour donner de la profondeur */
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Style du bouton de menu pour mobile */
+
 .navbar-toggler {
-    border-color: #ddd; /* Couleur de bordure pour le toggler */
+    border-color: #ddd;
 }
 
 .navbar-toggler-icon {
-    background-color: #333; /* Changer la couleur du hamburger */
+    background-color: #333;
 }
 
-/* Liens du menu */
+
 .nav-item .nav-link {
     color: #333 !important; /* Couleur du texte */
     font-weight: 500;

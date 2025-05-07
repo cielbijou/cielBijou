@@ -49,4 +49,12 @@ class AccueilController extends AbstractController
             'conditions' => '',
         ]);
     }
+
+    #[Route('/politique/confidentialité', name: 'accueil_politique_confidentialite')]
+    public function politiqueConfidentialite(): Response
+    {
+        return $this->render('accueil/politiqueConfidentialite.html.twig', [
+            'politique' => '',
+        ]);
+    }
 }
